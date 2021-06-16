@@ -31,7 +31,7 @@ MAB.RPATH<-unique(total.biomass$RPATH,na.rm=true)
 ## Run linear model for all functional groups
 ba<-c()
 p<-c()
-for (i in 2:52){
+for (i in 2:50){
   lm<-lm(biomass.t_area~YEAR, data = subset(total.biomass, RPATH == MAB.RPATH[i]))
   spF <- as.numeric(summary(lm)$fstatistic)
   p[i] <- pf(spF[1], spF[2], spF[3], lower = F)
