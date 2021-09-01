@@ -25,12 +25,12 @@ landings <- comland$comland[AREA %in% full.areas, ]
 proportions <- readRDS(here('data/All_Species_Proportions.rds')) 
 proportions <- proportions[AREA %in% c(526, 537) & InOut == 'out', ]  
 
-mab.split.land <- assign_area(comland, proportions, areaDescription = 'InOut', 
+mab.split.land <- aggregate_area(comland$comland, proportions, areaDescription = 'InOut', 
                               propDescription = 'MeanProp')
-mab.split.land$comland[, InOut := NULL]
+mab.split.land[, InOut := NULL]
 
 #Merge split landings with other landings
-landings <- rbindlist(list(landings, mab.split.land$comlands))
+landings <- rbindlist(list(landings, mab.split.land), use.names = T)
 
 #Assign gears to fleets
 #Generate NEGEAR2 codes from NEGEAR
