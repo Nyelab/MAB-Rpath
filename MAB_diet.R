@@ -607,5 +607,9 @@ MAB.diet.EMAX<-rbindlist(list(MAB.diet.EMAX,combomega))
 #Merge diet.survey with diet.EMAX
 MAB.diet <- rbindlist(list(MAB.diet.survey, MAB.diet.EMAX), use.names = T)
 
+#Clean diet matrix
+MAB.diet<-MAB.diet[-1:-3]
+MAB.diet<-MAB.diet[-150:-159]
+
 #Output results to csv
 save(MAB.diet, file = 'data/MAB_diet.RData')

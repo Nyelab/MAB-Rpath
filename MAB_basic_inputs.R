@@ -6,7 +6,7 @@
 ##
 ## Author: Brandon Beltz
 ##
-## Date Created: 2021-06-15
+## Last updated: 26 Aug 2021
 ##
 ## Email: brandon.beltz@stonybrook.edu
 ## ---------------------------
@@ -16,11 +16,9 @@
 ## ---------------------------
 ## Set working directory
 
-setwd("C:/Users/beven/OneDrive - Stony Brook University/Research/Rpath-MAB")
-
 ## Load libraries
 
-library(data.table)
+library(data.table);library(here)
 
 ## ---------------------------
 

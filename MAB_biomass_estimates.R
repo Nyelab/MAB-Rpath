@@ -21,7 +21,7 @@ setwd("C:/Users/beven/OneDrive - Stony Brook University/Research/Rpath-MAB")
 
 ## Load libraries, packages and functions
 
-library(data.table); library(rgdal); library(Survdat)
+library(data.table); library(rgdal); library(Survdat); library(here)
 '%notin%' <-Negate('%in%')
 
 ## Load Survdat, species list and strata
