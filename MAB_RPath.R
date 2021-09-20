@@ -198,3 +198,17 @@ source("MAB_diet_fill.R")
 ## Run model
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
+
+## Save .csv file with model information
+write.csv(MAB.rpath.params$model, file="MAB_model.csv")
+
+## Balance adjustments
+
+## Rerun model, check prebal diagnostics and save EEs
+MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
+MAB.rpath
+#source("MAB_prebal.R")
+write.csv(MAB.rpath$EE,file="MAB_EE_temp.csv")
+write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
+EE<-MAB.rpath$EE
+EE[order(EE)]

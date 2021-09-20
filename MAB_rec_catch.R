@@ -19,7 +19,7 @@
 setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
-library(here);library(tidyr);library(data.table);library(rgdal);library(Survdat)
+library(here);library(tidyr);library(data.table);library(rgdal);library(Survdat); library(dplyr)
 
 ## Load MRIP species list, RPath species list and MAB groups
 load("data/Species_codes.RData")
@@ -35,9 +35,7 @@ species_key<-merge(MAB.groups,species_key,by = "RPATH")
 colnames(species_key)[2]<-"SP_CODE"
 
 ## Subset MRIP data by state and area
-MAB.mrip<-filter(MAB.mrip, ST == c(9,10,24,34,36,37,44,51))
-MAB.mrip<-filter(MAB.mrip,AREA_X < 4)
-MAB.mrip<-MAB.mrip[,c(4,19)]
+MAB.mrip<-subset(MAB.mrip,MAB.mrip$ST == c(9,10,24,34,36,37,44,51) | MAB.mrip$AREA_X < 4, select=c(SP_CODE,WGT_AB1))
 
 ## Merge with RPath names
 MAB.mrip<-merge(MAB.mrip,species_key,by = "SP_CODE")
@@ -53,4 +51,4 @@ strata<-readOGR('data/strata','strata')
 strat.area<-getarea(strata, 'STRATA')
 setnames(strat.area,'STRATA','STRATUM')
 MAB.strat.area<-strat.area[STRATUM %in% MAB.strata,sum(Area)]
-MAB.mrip$Per_Area<-MAB.mrip$WGT_AB1/MAB.strat.area
+MAB.mrip$Per_Area<-(MAB.mrip$WGT_AB1/1000)/MAB.strat.area
