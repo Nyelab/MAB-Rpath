@@ -16,12 +16,14 @@
 ## ---------------------------
 ## Set working directory
 
+setwd("C:/Users/beven/Desktop/MAB-Rpath")
+
 ## Load libraries, packages and functions
 
 library(Survdat); library(data.table); library(rgdal)
 
 ## Run MAB_biomass_estimates.R
-source(here('MAB_biomass_estimates.R'))
+source('MAB_biomass_estimates.R')
 
 ## Get RPATH groups from biomass estimates
 MAB.RPATH<-unique(total.biomass$RPATH,na.rm=true)
@@ -41,6 +43,6 @@ MAB.bioacc<-cbind(MAB.RPATH,ba,p)
 MAB.bioacc_sig<-subset(MAB.bioacc, p<=0.05 & abs(ba) >= 0.005)
 
 ## Output to .csv
-save(MAB.bioacc_sig, file = here('data/MAB_biomass_accumulation.RData'))
+save(MAB.bioacc_sig, file ='data/MAB_biomass_accumulation.RData')
 MAB.ba<-MAB.bioacc_sig[,-3]
 colnames(MAB.ba)[1]<-"RPATH"

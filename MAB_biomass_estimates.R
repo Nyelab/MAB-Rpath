@@ -17,7 +17,7 @@
 ## ---------------------------
 ## Set working directory
 
-setwd("C:/Users/beven/OneDrive - Stony Brook University/Research/Rpath-MAB")
+setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
 

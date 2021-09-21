@@ -16,6 +16,8 @@
 ## ---------------------------
 ## Set working directory
 
+setwd("C:/Users/beven/Desktop/MAB-Rpath")
+
 ## Load libraries
 
 library(data.table);library(here)

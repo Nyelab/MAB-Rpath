@@ -17,7 +17,7 @@
 ## ---------------------------
 ## Set working directory
 
-setwd("C:/Users/beven/OneDrive - Stony Brook University/Research/Rpath-MAB")
+setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
 
@@ -259,7 +259,7 @@ convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMacke
                                     'Megabenthos','Mesopelagics','Micronekton','Microzooplankton','Demersals- benthivores',
                                     'Odontocetes','Small Pelagics- squid','Demersals- benthivores','Medium Pelagics- (piscivores & other)',
                                     'Shrimp et al.','Demersals- omnivores','Phytoplankton- Primary Producers','Demersals- benthivores',
-                                    'Demersals- benthivores','Sea Birds','Sharks- pelagics','Demersals- piscivores','Small Copepods',
+                                    'Demersals- benthivores','Sea Birds','Sharks- pelagics','Demersals- piscivores','Small copepods',
                                     'Demersals- benthivores','Demersals- piscivores','Small pelagics- other','Demersals- benthivores',
                                     'Demersals- piscivores','Demersals- piscivores','Demersals- benthivores','Demersals- piscivores',
                                     'Demersals- benthivores','Demersals- benthivores','Demersals- omnivores','Demersals- benthivores'))

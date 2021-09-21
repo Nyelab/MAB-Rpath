@@ -55,7 +55,7 @@ ba<-as.vector(ba$BA)
 MAB.rpath.params$model[,BioAcc:=ba]
 
 ## Add unassimilated consumption
-
+MAB.rpath.params$model[, Unassim := c(rep(0.2,5),0.4,rep(0.2,6),0.4,rep(0.2,3),0.4,rep(0.2,6),0.4,rep(0.2,7),0,rep(0.2,5),0.4,rep(0.2,12),rep(0,2),rep(NA,11))]
 
 ## Add detrital fate and set discards to 0
 MAB.rpath.params$model[,Detritus:=c(rep(1,50),rep(0,13))]
@@ -204,11 +204,47 @@ write.csv(MAB.rpath.params$model, file="MAB_model.csv")
 
 ## Balance adjustments
 
+## Increase OtherPelagics biomass by 150x
+MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*150
+
+## Increase OtherDemersals biomass by 500x
+MAB.rpath.params$model$Biomass[28]<-MAB.rpath.params$model$Biomass[28]*500
+
+## Increase OtherDemersals P/B by 2x
+MAB.rpath.params$model$PB[28]<-MAB.rpath.params$model$PB[28]*2
+
+## Increase OtherShrimps biomass by 300x
+MAB.rpath.params$model$Biomass[30]<-MAB.rpath.params$model$Biomass[30]*300
+
+## Increase OtherShrimps P/B by 1.5x (Okey; Lucey; Link; Buccheister)
+MAB.rpath.params$model$PB[30]<-MAB.rpath.params$model$PB[30]*1.5
+
+## Increase OtherCephalopods biomass by 1000x
+MAB.rpath.params$model$Biomass[27]<-MAB.rpath.params$model$Biomass[27]*1000
+
+## Increase BlackSeaBass biomass by 10x
+MAB.rpath.params$model$Biomass[8]<-MAB.rpath.params$model$Biomass[8]*10
+
+## Increase BlackSeaBass P/B by 4x (Okey)
+MAB.rpath.params$model$PB[8]<-MAB.rpath.params$model$PB[8]*4
+
+## Increase Megabenthos biomass by 100x
+MAB.rpath.params$model$Biomass[21]<-MAB.rpath.params$model$Biomass[21]*100
+
+## Increase Sharks P/B by 2x (Okey; Buccheister; Lucey)
+MAB.rpath.params$model$PB[36]<-MAB.rpath.params$model$PB[36]*2
+
+## Increase AtlMackerel biomass by 80x
+MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*80
+
+## Increase SouthernDemersals biomass by 5x
+MAB.rpath.params$model$Biomass[42]<-MAB.rpath.params$model$Biomass[42]*5
+
 ## Rerun model, check prebal diagnostics and save EEs
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
 #source("MAB_prebal.R")
-write.csv(MAB.rpath$EE,file="MAB_EE_temp.csv")
-write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
+#write.csv(MAB.rpath$EE,file="MAB_EE_temp.csv")
+#write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 EE<-MAB.rpath$EE
 EE[order(EE)]
