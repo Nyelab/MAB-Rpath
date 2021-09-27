@@ -22,7 +22,7 @@ library(Rpath); library(data.table);library(dplyr);library(here)
 
 ## Trophic level/Log biomass
 trophic.lvl<-MAB.rpath$TL
-log.biomass<-log10(biomass)
+log.biomass<-log10(MAB.rpath.params$model$Biomass)
 prebal<-as.data.frame(cbind(trophic.lvl,log.biomass))
 row.names(prebal)<-groups
 colnames(prebal)<-c("TL","LogB")
@@ -51,7 +51,7 @@ abline(linear.model$coefficients[1]-sd2,linear.model$coefficients[2])
 
 ## Sum quarter trophic level
 prebal<-as.data.frame(MAB.rpath$TL)
-prebal<-cbind(prebal,biomass)
+prebal<-cbind(prebal,MAB.rpath.params$model$Biomass)
 row.names(prebal)<-groups
 colnames(prebal)<-c("TL","Biomass")
 prebal<-prebal[1:50,]

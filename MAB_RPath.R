@@ -204,47 +204,292 @@ write.csv(MAB.rpath.params$model, file="MAB_model.csv")
 
 ## Balance adjustments
 
-## Increase OtherPelagics biomass by 150x
-MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*150
+## OtherPelagics
+## Increase biomass by 300x (Lucey, Link, Buccheister et al.)
+MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*300
+## Increase PB by 3x
+MAB.rpath.params$model$PB[29]<-MAB.rpath.params$model$PB[29]*3
+## Decrease Trap fishing by 0.7x
+MAB.rpath.params$model$Trap[29]<-MAB.rpath.params$model$Trap[29]*.7
+## Decrease Recreational fishing by 0.7x
+MAB.rpath.params$model$Recreational[29]<-MAB.rpath.params$model$Recreational[29]*.7
 
-## Increase OtherDemersals biomass by 500x
+## OtherDemersals
+## Increase biomass by 500x (Lucey, Link, Buccheister et al.)
 MAB.rpath.params$model$Biomass[28]<-MAB.rpath.params$model$Biomass[28]*500
+## Increase PB by 1.5x (Lucey, Okey)
+MAB.rpath.params$model$PB[28]<-MAB.rpath.params$model$PB[28]*1.5
 
-## Increase OtherDemersals P/B by 2x
-MAB.rpath.params$model$PB[28]<-MAB.rpath.params$model$PB[28]*2
-
-## Increase OtherShrimps biomass by 300x
-MAB.rpath.params$model$Biomass[30]<-MAB.rpath.params$model$Biomass[30]*300
-
-## Increase OtherShrimps P/B by 1.5x (Okey; Lucey; Link; Buccheister)
-MAB.rpath.params$model$PB[30]<-MAB.rpath.params$model$PB[30]*1.5
-
-## Increase OtherCephalopods biomass by 1000x
+## OtherCephalopods
+## Increase biomass by 1000x (Lucey)
 MAB.rpath.params$model$Biomass[27]<-MAB.rpath.params$model$Biomass[27]*1000
 
-## Increase BlackSeaBass biomass by 10x
+## BlackSeaBass
+## Increase biomass by 10x (Lucey)
 MAB.rpath.params$model$Biomass[8]<-MAB.rpath.params$model$Biomass[8]*10
+## Increase PB by 3x (Buccheister et al., Link, Okey)
+MAB.rpath.params$model$PB[8]<-MAB.rpath.params$model$PB[8]*3
 
-## Increase BlackSeaBass P/B by 4x (Okey)
-MAB.rpath.params$model$PB[8]<-MAB.rpath.params$model$PB[8]*4
+## OtherShrimps
+## Increase biomass by 100x (Link)
+MAB.rpath.params$model$Biomass[30]<-MAB.rpath.params$model$Biomass[30]*150
+## Increase PB by 2x (Lucey, Okey)
+MAB.rpath.params$model$PB[30]<-MAB.rpath.params$model$PB[30]*2
 
-## Increase Megabenthos biomass by 100x
-MAB.rpath.params$model$Biomass[21]<-MAB.rpath.params$model$Biomass[21]*100
+## Sharks
+## Increase biomass by 3x (Okey)
+MAB.rpath.params$model$Biomass[36]<-MAB.rpath.params$model$Biomass[36]*3
+## Increase PB by 5x (Okey)
+MAB.rpath.params$model$PB[36]<-MAB.rpath.params$model$PB[36]*5
+## Decrease Recreational fishing by 0.1x
+MAB.rpath.params$model$Recreational[36]<-MAB.rpath.params$model$Recreational[36]*.1
 
-## Increase Sharks P/B by 2x (Okey; Buccheister; Lucey)
-MAB.rpath.params$model$PB[36]<-MAB.rpath.params$model$PB[36]*2
+## SouthernDemersals *NEED MORE REFERENCE FOR THESE SPECIES*
+## Increase biomass by 10x
+MAB.rpath.params$model$Biomass[42]<-MAB.rpath.params$model$Biomass[42]*10
+## Increase PB by 1.2x (Lucey)
+MAB.rpath.params$model$PB[42]<-MAB.rpath.params$model$PB[42]*1.2
 
-## Increase AtlMackerel biomass by 80x
-MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*80
+## AtlMackerel
+## Increase biomass by 75x (Lucey, Buccheister)
+MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*75
+## Increase PB by 2x (Lucey)
+MAB.rpath.params$model$PB[4]<-MAB.rpath.params$model$PB[4]*2
 
-## Increase SouthernDemersals biomass by 5x
-MAB.rpath.params$model$Biomass[42]<-MAB.rpath.params$model$Biomass[42]*5
+## Megabenthos
+## Increase biomass by 150x (Buccheister)
+MAB.rpath.params$model$Biomass[21]<-MAB.rpath.params$model$Biomass[21]*150
+
+## Cod
+## Increase biomass by 20x (Lucey)
+MAB.rpath.params$model$Biomass[11]<-MAB.rpath.params$model$Biomass[11]*20
+
+## SmFlatfishes
+## Increase biomass by 100x (Lucey)
+MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*100
+
+## Bluefish
+## Increase biomass by 3x (Buccheister)
+MAB.rpath.params$model$Biomass[9]<-MAB.rpath.params$model$Biomass[9]*3
+## Increase PB by 1.2x (Okey)
+MAB.rpath.params$model$PB[9]<-MAB.rpath.params$model$PB[9]*1.2
+
+## SummerFlounder
+## Increase biomass by 1.5x (Lucey)
+MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*1.5
+
+## SmPelagics
+## Increase biomass by 10x (Link, Buccheister)
+MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*10
+## Increase PB by 1.25x (Lucey)
+MAB.rpath.params$model$PB[41]<-MAB.rpath.params$model$PB[41]*1.25
+
+## Windowpane
+## Increase biomass by 20x (Lucey)
+MAB.rpath.params$model$Biomass[47]<-MAB.rpath.params$model$Biomass[47]*20
+## Increase PB by 3x (Buccheister, Link, Okey)
+MAB.rpath.params$model$PB[47]<-MAB.rpath.params$model$PB[47]*2
+
+## WinterFlounder
+## Increase biomass by 20x (Lucey)
+MAB.rpath.params$model$Biomass[48]<-MAB.rpath.params$model$Biomass[48]*20
+
+## WinterSkate
+## Increase biomass by 10x (Lucey)
+MAB.rpath.params$model$Biomass[49]<-MAB.rpath.params$model$Biomass[49]*10
+
+## LittleSkate
+## Increase biomass by 8x (Lucey)
+MAB.rpath.params$model$Biomass[18]<-MAB.rpath.params$model$Biomass[18]*8
+
+## OceanPout
+## Increase biomass by 20x (Lucey)
+MAB.rpath.params$model$Biomass[25]<-MAB.rpath.params$model$Biomass[25]*20
+
+## SilverHake
+## Increase biomass by 10x (Lucey, Okey)
+MAB.rpath.params$model$Biomass[37]<-MAB.rpath.params$model$Biomass[37]*10
+## Increase PB by 1.5x (Okey)
+MAB.rpath.params$model$PB[37]<-MAB.rpath.params$model$PB[37]*1.5
+
+## Scup
+## Increase biomass by 5x (Lucey)
+MAB.rpath.params$model$Biomass[34]<-MAB.rpath.params$model$Biomass[34]*5
+## Increase PB by 2x (Okey)
+MAB.rpath.params$model$PB[34]<-MAB.rpath.params$model$PB[34]*2
+
+## Mesopelagics
+## Increase PB by 1.5x (Lucey)
+MAB.rpath.params$model$PB[22]<-MAB.rpath.params$model$PB[22]*1.5
+
+## Odontocetes
+## Increase biomass by 5x (Lucey)
+MAB.rpath.params$model$Biomass[26]<-MAB.rpath.params$model$Biomass[26]*5
+## Increase PB by 1.25x (Okey)
+MAB.rpath.params$model$PB[26]<-MAB.rpath.params$model$PB[26]*1.25
+
+## OtherSkates
+## Increase biomass by 5x (Buccheister, Okey)
+MAB.rpath.params$model$Biomass[31]<-MAB.rpath.params$model$Biomass[31]*5
+
+## AtlScallop
+## Increase biomass by 10x (Lucey)
+MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*10
+
+## Butterfish
+## Increase biomass by 1.5x (Lucey)
+MAB.rpath.params$model$Biomass[10]<-MAB.rpath.params$model$Biomass[10]*1.5
+## Increase PB by 1.5x (Okey)
+MAB.rpath.params$model$PB[10]<-MAB.rpath.params$model$PB[10]*1.5
+
+## WhiteHake
+## Increase biomass by 10x (Lucey)
+MAB.rpath.params$model$Biomass[46]<-MAB.rpath.params$model$Biomass[46]*10
+## Increase PB by 2x (Buccheister)
+MAB.rpath.params$model$PB[46]<-MAB.rpath.params$model$PB[46]*2
+
+## Weakfish
+## Increase PB by 2.5x (Buccheister)
+MAB.rpath.params$model$PB[45]<-MAB.rpath.params$model$PB[45]*2.5
+
+## AmShad
+## Increase biomass by 5x
+MAB.rpath.params$model$Biomass[2]<-MAB.rpath.params$model$Biomass[2]*5
+
+## Goosefish
+## Increase biomass by 2.5x (Lucey, Okey)
+MAB.rpath.params$model$Biomass[14]<-MAB.rpath.params$model$Biomass[14]*2.5
+
+## Fourspot
+## Increase biomass by 2x (Lucey)
+MAB.rpath.params$model$Biomass[12]<-MAB.rpath.params$model$Biomass[12]*2
+
+## YTFlounder
+## Increase biomass by 2x (Buccheister)
+MAB.rpath.params$model$Biomass[50]<-MAB.rpath.params$model$Biomass[50]*2
+## Increase PB by 2x (Buccheister)
+MAB.rpath.params$model$PB[50]<-MAB.rpath.params$model$PB[50]*2
+
+## SpinyDogfish
+## Increase PB by 1.5x (Lucey)
+MAB.rpath.params$model$PB[43]<-MAB.rpath.params$model$PB[43]*1.5
+## Decrease QB by 0.5x
+MAB.rpath.params$model$QB[43]<-MAB.rpath.params$model$QB[43]*.5
+
+## RedHake
+## Increase biomass by 5x (Lucey)
+MAB.rpath.params$model$Biomass[33]<-MAB.rpath.params$model$Biomass[33]*5
+
+## Micronekton
+## Increase PB by 1.5x (Lucey)
+MAB.rpath.params$model$PB[23]<-MAB.rpath.params$model$PB[23]*1.5
+
+## AmLobster
+## Increase biomass by 2x
+MAB.rpath.params$model$Biomass[1]<-MAB.rpath.params$model$Biomass[1]*2
+
+## HMS
+## Decrease QB by 0.75x (Lucey)
+MAB.rpath.params$model$QB[15]<-MAB.rpath.params$model$QB[15]*.75
+
+## Reallocate predation of Sharks
+## Sharks: Sharks -0.1%, AmShad +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[2,37]<-MAB.rpath.params$diet[2,37]+0.001
+## Sharks: Sharks -0.1%, HMS +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[15,37]<-MAB.rpath.params$diet[15,37]+0.001
+## Sharks: Sharks -0.1%, Illex +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[16,37]<-MAB.rpath.params$diet[16,37]+0.001
+## Sharks: Sharks -0.1%, OceanPout +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[25,37]<-MAB.rpath.params$diet[25,37]+0.001
+## Sharks: Sharks -0.1%, RedHake +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[33,37]<-MAB.rpath.params$diet[33,37]+0.001
+## Sharks: Sharks -0.1%, Scup +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[34,37]<-MAB.rpath.params$diet[34,37]+0.001
+## Sharks: Sharks -0.1%, WhiteHake +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[46,37]<-MAB.rpath.params$diet[46,37]+0.001
+## Sharks: Sharks -0.1%, Windowpane +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[47,37]<-MAB.rpath.params$diet[47,37]+0.001
+## Sharks: Sharks -0.1%, WinterFlounder +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[48,37]<-MAB.rpath.params$diet[48,37]+0.001
+## Sharks: Sharks -0.1%, YTFlounder +0.1%
+MAB.rpath.params$diet[36,37]<-MAB.rpath.params$diet[36,37]-0.001
+MAB.rpath.params$diet[50,37]<-MAB.rpath.params$diet[50,37]+0.001
+
+## Reallocate predation on OtherPelagics
+## Bluefish: OtherPelagics -0.4%, Illex +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[16,10]<-MAB.rpath.params$diet[16,10]+0.004
+## Bluefish: OtherPelagics -0.4%, Loligo +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[19,10]<-MAB.rpath.params$diet[19,10]+0.004
+## Bluefish: OtherPelagics -0.4%, Macrobenthos +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[20,10]<-MAB.rpath.params$diet[20,10]+0.004
+## Bluefish: OtherPelagics -0.4%, Micronekton +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[23,10]<-MAB.rpath.params$diet[23,10]+0.004
+## Bluefish: OtherPelagics -0.4%, OceanPout +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[25,10]<-MAB.rpath.params$diet[25,10]+0.004
+## Bluefish: OtherPelagics -0.4%, OtherSkates +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[31,10]<-MAB.rpath.params$diet[31,10]+0.004
+## Bluefish: OtherPelagics -0.4%, RedHake +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[33,10]<-MAB.rpath.params$diet[33,10]+0.004
+## Bluefish: OtherPelagics -0.4%, Windowpane +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[47,10]<-MAB.rpath.params$diet[47,10]+0.004
+## Bluefish: OtherPelagics -0.4%, WinterFlounder +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[48,10]<-MAB.rpath.params$diet[48,10]+0.004
+## Bluefish: OtherPelagics -0.4%, YTFlounder +0.4%
+MAB.rpath.params$diet[29,10]<-MAB.rpath.params$diet[29,10]-0.004
+MAB.rpath.params$diet[50,10]<-MAB.rpath.params$diet[50,10]+0.004
+
+## Cod: OtherPelagics -1%, AmLobster +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[1,12]<-MAB.rpath.params$diet[1,12]+0.01
+## Cod: OtherPelagics -1%, Macrobenthos +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[20,12]<-MAB.rpath.params$diet[20,12]+0.01
+## Cod: OtherPelagics -1%, Micronekton +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[23,12]<-MAB.rpath.params$diet[23,12]+0.01
+## Cod: OtherPelagics -1%, OceanPout +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[25,12]<-MAB.rpath.params$diet[25,12]+0.01
+## Cod: OtherPelagics -1%, OtherSkates +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[31,12]<-MAB.rpath.params$diet[31,12]+0.01
+## Cod: OtherPelagics -1%, RedHake +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[33,12]<-MAB.rpath.params$diet[33,12]+0.01
+## Cod: OtherPelagics -1%, Windowpane +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[47,12]<-MAB.rpath.params$diet[47,12]+0.01
+## Cod: OtherPelagics -1%, WinterFlounder +1%
+MAB.rpath.params$diet[29,12]<-MAB.rpath.params$diet[29,12]-0.01
+MAB.rpath.params$diet[48,12]<-MAB.rpath.params$diet[48,12]+0.01
 
 ## Rerun model, check prebal diagnostics and save EEs
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
-#source("MAB_prebal.R")
+source("MAB_prebal.R")
 #write.csv(MAB.rpath$EE,file="MAB_EE_temp.csv")
 #write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 EE<-MAB.rpath$EE
 EE[order(EE)]
+
+write.csv(MAB.rpath.params$diet,file="MAB.rpath.diet.csv")
+write.csv(MAB.rpath.params$model,file="MAB.rpath.model.csv")
+MAB.rpath$PB[4]
