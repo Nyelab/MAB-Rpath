@@ -17,7 +17,7 @@
 ## ---------------------------
 ## Set working directory
 
-setwd("C:/Users/beven/OneDrive - Stony Brook University/Research/Rpath-MAB")
+setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
 
@@ -46,7 +46,7 @@ prey[PYCOMNAM == 'OFFSHORE HAKE',           RPATH := 'OtherDemersals']
 prey[PYCOMNAM == 'SILVER HAKE',             RPATH := 'SilverHake']
 prey[PYCOMNAM == 'SILVER HAKE OTOLITHS',    RPATH := 'SilverHake']
 prey[PYCOMNAM == 'RED HAKE',                RPATH := 'RedHake']
-prey[PYCOMNAM == 'WHITE HAKE',              RPATH := 'WhiteHake']
+prey[PYCOMNAM == 'WHITE HAKE',              RPATH := 'OtherDemersals']
 prey[PYCOMNAM == 'ACADIAN REDFISH',         RPATH := 'Redfish']
 prey[PYCOMNAM == 'POLLOCK',                 RPATH := 'OtherDemersals']
 prey[PYCOMNAM == 'OCEAN POUT',              RPATH := 'OceanPout']
@@ -247,8 +247,8 @@ convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMacke
                                      'OtherShrimps','OtherSkates','Phytoplankton','RedHake','Scup',
                                      'SeaBirds','Sharks','SilverHake','SmCopepods','SmFlatfishes',
                                      'SmoothDogfish','SmPelagics','SouthernDemersals','SpinyDogfish',
-                                     'SummerFlounder','Weakfish','WhiteHake','Windowpane',
-                                     'WinterFlounder','WinterSkate','YTFlounder'),
+                                     'SummerFlounder','Weakfish','Windowpane',
+                                     'WinterFlounder','WinterSkate','YTFlounder','Discards','Detritus'),
                            
                            EMAX = c('Megabenthos- other','Small Pelagics- commercial','Demersals- benthivores',
                                     'Small Pelagics- commercial','Megabenthos- filterers','Bacteria',
@@ -259,10 +259,10 @@ convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMacke
                                     'Megabenthos','Mesopelagics','Micronekton','Microzooplankton','Demersals- benthivores',
                                     'Odontocetes','Small Pelagics- squid','Demersals- benthivores','Medium Pelagics- (piscivores & other)',
                                     'Shrimp et al.','Demersals- omnivores','Phytoplankton- Primary Producers','Demersals- benthivores',
-                                    'Demersals- benthivores','Sea Birds','Sharks- pelagics','Demersals- piscivores','Small Copepods',
+                                    'Demersals- benthivores','Sea Birds','Sharks- pelagics','Demersals- piscivores','Small copepods',
                                     'Demersals- benthivores','Demersals- piscivores','Small pelagics- other','Demersals- benthivores',
-                                    'Demersals- piscivores','Demersals- piscivores','Demersals- benthivores','Demersals- piscivores',
-                                    'Demersals- benthivores','Demersals- benthivores','Demersals- omnivores','Demersals- benthivores'))
+                                    'Demersals- piscivores','Demersals- piscivores','Demersals- benthivores','Demersals- benthivores',
+                                    'Demersals- benthivores','Demersals- omnivores','Demersals- benthivores','Discard','Detritus-POC'))
 all.groups<-merge(all.groups,convert.groups,by = 'RPATH')
 
 #Remove EMAX:RPATH many:1s
@@ -270,7 +270,7 @@ all.groups <- all.groups[!RPATH %in% c('Megabenthos','Macrobenthos'),]
 
 #Calculate proportionality for EMAX:RPATH many:1s
 load("data/EMAX_params.RData")
-EMAX.params <- MAB.EMAX
+EMAX.params<-as.data.table(EMAX.params)
 
 #Megabenthos groups
 #Calculate biomass remaining in Megabenthos- filterers after removing scallops
@@ -297,8 +297,18 @@ SmPelagics <- as.data.table(EMAX.params[Group =='Small Pelagics- anadromous', c(
 SmPelagics <- cbind(SmPelagics,"SmPelagics")
 setnames(SmPelagics,c('EMAX','Biomass','RPATH'))
 
+#Discard group
+EMAX.discards <- as.data.table(EMAX.params[Group =='Discard', c(1,3)])
+EMAX.discards <- cbind(EMAX.discards,"Discards")
+setnames(EMAX.discards,c('EMAX','Biomass','RPATH'))
+
+#Detritus group
+EMAX.detritus <- as.data.table(EMAX.params[Group =='Detritus-POC', c(1,3)])
+EMAX.detritus <- cbind(EMAX.detritus,"Detritus")
+setnames(EMAX.detritus,c('EMAX','Biomass','RPATH'))
+
 #Merge all groups
-all.groups <- rbind(all.groups,Megabenthos.filterers,Megabenthos.other,Macrobenthos,Micronekton,SmPelagics, fill=TRUE)
+all.groups <- rbind(all.groups,Megabenthos.filterers,Megabenthos.other,Macrobenthos,Micronekton,SmPelagics,EMAX.discards,EMAX.detritus, fill=TRUE)
 all.groups <- all.groups[,Biomass := as.numeric(Biomass)]
 all.groups[, EMAX.tot := sum(Biomass), by = EMAX]
 all.groups[, Rpath.prop := Biomass / EMAX.tot]
@@ -606,6 +616,13 @@ MAB.diet.EMAX<-rbindlist(list(MAB.diet.EMAX,combomega))
 
 #Merge diet.survey with diet.EMAX
 MAB.diet <- rbindlist(list(MAB.diet.survey, MAB.diet.EMAX), use.names = T)
+
+#Clean diet matrix
+MAB.diet<-na.omit(MAB.diet)
+MAB.diet<-MAB.diet[-148:-157]
+
+#Import diet table for testing webplot shifts
+MAB.diet<-read.csv(file = "MAB_diet_adjusted.csv", header = TRUE, stringsAsFactors = FALSE)
 
 #Output results to csv
 save(MAB.diet, file = 'data/MAB_diet.RData')

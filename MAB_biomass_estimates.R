@@ -17,11 +17,11 @@
 ## ---------------------------
 ## Set working directory
 
-setwd("C:/Users/beven/OneDrive - Stony Brook University/Research/Rpath-MAB")
+setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
 
-library(data.table); library(rgdal); library(Survdat)
+library(data.table); library(rgdal); library(Survdat); library(here)
 '%notin%' <-Negate('%in%')
 
 ## Load Survdat, species list and strata
@@ -50,6 +50,7 @@ spp <- spp[RPATH == 'RedCrab', RPATH := 'Megabenthos']
 spp <- spp[RPATH == 'RiverHerring', RPATH := 'SmPelagics']
 spp <- spp[RPATH == 'Tilefish', RPATH := 'SouthernDemersals']
 spp <- spp[RPATH == 'WitchFlounder', RPATH := 'OtherDemersals']
+spp <- spp[RPATH == 'WhiteHake', RPATH := 'OtherDemersals']
 
 ## Subset by Fall and MAB strata
 MAB.fall<-survdat[SEASON == 'FALL' & STRATUM %in% MAB.strata,]
@@ -75,7 +76,7 @@ total.biomass<-merge(total.biomass,spp[,list(SVSPP,RPATH,SCINAME,Fall.q)], by = 
 ## Calculate total area
 MAB.strat.area<-strat.area[STRATUM %in% MAB.strata,sum(Area)]
 
-## Convert to b/a in mt
+## Convert to b/a in mt/km^2
 total.biomass <- total.biomass[, biomass.t_area :=(tot.biomass*.001)/(Fall.q*MAB.strat.area)]
 
 #Average for 1980-85
@@ -87,6 +88,7 @@ save(MAB.biomass.80s, file = 'data/MAB_biomass_fall_80s.RData')
 
 ## Add EMAX groups
 load("data/EMAX_params.RData")
+MAB.EMAX<-as.data.table(EMAX.params)
 
 ## Merge groups with biomass estimates
 MAB.groups<-merge(MAB.biomass.80s, MAB.groups, by = 'RPATH', all.y=TRUE)
