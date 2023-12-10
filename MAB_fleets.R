@@ -4,26 +4,20 @@
 ## Purpose of script: Create a data table of groups and fleets for use in the
 ##                    final MAB Rpath model.
 ##                    
-## Author: Brandon Beltz
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
-## Date Created: 26 Aug 2021
 ##
 ## Email: brandon.beltz@stonybrook.edu
-## ---------------------------
-##
-## Notes:
-##
-## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 16:55:53 2023 ------------------------------
+
 
 ## Load libraries, packages and functions
 library(data.table)
 
 ## Load commercial landings from Sean and MAB basic inputs
 load("data/mean_landings_mab_80_85.RData")
-source("MAB_basic_inputs.R")
+source(here("MAB_basic_inputs.R"))
 
 ## Rename HMS to HMS Fleet
 mean.land[FLEET == "HMS",FLEET := "HMS Fleet"]

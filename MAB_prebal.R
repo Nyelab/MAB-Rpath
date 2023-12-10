@@ -10,12 +10,6 @@
 ##
 ## Email: brandon.beltz@stonybrook.edu
 ## ---------------------------
-##
-## Notes:
-##
-## ---------------------------
-## Set Working directory
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
 library(Rpath); library(data.table);library(dplyr);library(here)

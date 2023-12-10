@@ -29,11 +29,13 @@ MAB.rpath.params[["model"]][["BioAcc"]][50:51] <- 0
 #issue is with rec fishery
 MAB.rpath.params[["model"]][["Recreational"]][52:62] <-NA
 
+#adjust scallop predation
+
 #redo copepods
 source(here("Sarah_R/redo_copepods.R"))
 
 
-check.rpath.params(GOM.params)
+check.rpath.params(MAB.rpath.params)
 
 
 rpath(MAB.rpath.params, eco.name = "Mid-Atlantic Bight")

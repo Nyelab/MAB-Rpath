@@ -4,19 +4,14 @@
 ## Purpose of script: User enters basic model data for reference in future
 ##                    scripts.
 ##
-## Author: Brandon Beltz
-##
-## Last updated: 26 Aug 2021
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
 ## Email: brandon.beltz@stonybrook.edu
 ## ---------------------------
 ##
 ## Notes: This version is specific to the MABRpath model.
-##
-## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 16:54:11 2023 ------------------------------
 
 ## Load libraries
 

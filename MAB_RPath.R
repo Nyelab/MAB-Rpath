@@ -4,9 +4,8 @@
 ## Purpose of script: Compile all data to create functional RPath model.
 ##                    
 ##
-## Author: Brandon Beltz
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
-## Last updated: 09 Sep 2021
 ##
 ## Email: brandon.beltz@stonybrook.edu
 ## ---------------------------
@@ -15,27 +14,26 @@
 ##        identifying and resolving issues.
 ##
 ## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 16:54:53 2023 ------------------------------
 
 ## Load libraries, packages and functions
 library(Rpath); library(data.table); library(dplyr); library(here)
 
 ## Add functional groups to model and generate rpath params
-source("MAB_fleets.R")
+source(here("MAB_fleets.R"))
 groups<-as.vector(groups_fleets$RPATH)
 types<-c(rep(0,31),1,rep(0,17),rep(2,2),rep(3,11))
 MAB.rpath.params<-create.rpath.params(group = groups, type = types)
 
 ## Add biomass estimates
-source("MAB_biomass_estimates.R")
+source(here("MAB_biomass_estimates.R"))
 biomass<-left_join(groups_fleets,MAB.biomass.80s,by = "RPATH")
 biomass<-as.vector(biomass$Biomass)
 MAB.rpath.params$model[,Biomass:=biomass]
 
 ## Add PB parameters
-source("MAB_params.R")
+source(here("MAB_params.R"))
 pb<-cbind(MAB.groups,MAB.PB)
 pb<-left_join(groups_fleets,pb,by = "RPATH")
 pb<-as.vector(pb$MAB.PB)
@@ -192,10 +190,10 @@ clam.d<-c(rep(0,49),rep(0,2),rep(NA,11))
 MAB.rpath.params$model[, "Clam Dredge.disc" := clam.d]
 
 ## Run diet matrix
-source("MAB_diet.R")
+source(here("MAB_diet.R"))
 
 ## Fill Rpath parameter file with diet
-source("MAB_diet_fill.R")
+source(here("MAB_diet_fill.R"))
 
 ## Run model
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
@@ -209,14 +207,14 @@ write.Rpath(MAB.rpath, file="MAB_model.csv")
 write.csv(MAB.rpath.params$model, file="MAB_prebalance_model.csv")
 write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
 
-## Balance adjustments
-MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
-MAB.rpath
-source("MAB_prebal.R")
-EE<-MAB.rpath$EE
-EE[order(EE)]
-write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
-#write.Rpath(MAB.rpath, file="MAB_model.csv")
+# ## Balance adjustments
+# MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
+# MAB.rpath
+# source(here("MAB_prebal.R"))
+# EE<-MAB.rpath$EE
+# EE[order(EE)]
+# write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
+# #write.Rpath(MAB.rpath, file="MAB_model.csv")
 
 ## Biomass changes
 ## OtherPelagics
