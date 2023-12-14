@@ -271,6 +271,9 @@ all.groups<-merge(all.groups,convert.groups,by = 'RPATH')
 #Remove EMAX:RPATH many:1s
 all.groups <- all.groups[!RPATH %in% c('Megabenthos','Macrobenthos'),]
 
+#Change Discard to Detritus
+all.groups[which(EMAX == "Discard")]$RPATH <- "Detritus"
+
 #Calculate proportionality for EMAX:RPATH many:1s
 load("data/EMAX_params.RData")
 EMAX.params<-as.data.table(EMAX.params)
@@ -302,7 +305,7 @@ setnames(SmPelagics,c('EMAX','Biomass','RPATH'))
 
 #Discard group
 EMAX.discards <- as.data.table(EMAX.params[Group =='Discard', c(1,3)])
-EMAX.discards <- cbind(EMAX.discards,"Discards")
+EMAX.discards <- cbind(EMAX.discards,"Detritus")
 setnames(EMAX.discards,c('EMAX','Biomass','RPATH'))
 
 #Detritus group

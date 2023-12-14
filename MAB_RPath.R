@@ -1,4 +1,4 @@
-## ---------------------------
+
 ## Script name: MAB_RPath.R
 ##
 ## Purpose of script: Compile all data to create functional RPath model.
@@ -7,18 +7,15 @@
 ## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
 ##
-## Email: brandon.beltz@stonybrook.edu
-## ---------------------------
-##
-## Notes: This version includes all original data for the purpose of
-##        identifying and resolving issues.
-##
-## ---------------------------
+## Email: sarah.j.weisberg@stonybrook.edu
+#
 
 # Fri Dec  8 16:54:53 2023 ------------------------------
 
 ## Load libraries, packages and functions
 library(Rpath); library(data.table); library(dplyr); library(here)
+
+# Model Setup -------------------------------------------------------------
 
 ## Add functional groups to model and generate rpath params
 source(here("MAB_fleets.R"))
@@ -195,6 +192,11 @@ source(here("MAB_diet.R"))
 ## Fill Rpath parameter file with diet
 source(here("MAB_diet_fill.R"))
 
+
+# Sarah_changes -----------------------------------------------------------
+
+source(here("Sarah_R/rebalance.R"))
+
 ## Run model
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
@@ -216,7 +218,7 @@ write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
 # write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 # #write.Rpath(MAB.rpath, file="MAB_model.csv")
 
-## Biomass changes
+# Balancing changes -------------------
 ## OtherPelagics
 ## Increase biomass by 200x (Lucey, Link, Buccheister et al.)
 MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*200
@@ -674,6 +676,7 @@ MAB.rpath.params$diet[20,30]<-MAB.rpath.params$diet[20,30]+0.1
 ## Loligo: Butterfish -1.5%, Macrobenthos +1.5%
 MAB.rpath.params$diet[10,20]<-MAB.rpath.params$diet[10,20]-0.015
 MAB.rpath.params$diet[20,20]<-MAB.rpath.params$diet[20,20]+0.015
+
 
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath

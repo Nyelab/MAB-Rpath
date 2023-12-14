@@ -9,16 +9,9 @@
 library(here)
 library(Rpath)
 library(dplyr)
-library(sf) #r spatial package
-library(ggplot2) #plotting
-library(rnaturalearth) #simple map 
-library(lubridate) #dates
-library(tidyverse)
-library(zoo)
-library(broom)
 
 #load Brandon's model
-load(here("MAB Rpath - BALANCED - July 2022.RData"))
+#load(here("MAB Rpath - BALANCED - July 2022.RData"))
 
 #correct detritus, discards BA, should be 0
 #had been NA
@@ -29,15 +22,8 @@ MAB.rpath.params[["model"]][["BioAcc"]][50:51] <- 0
 #issue is with rec fishery
 MAB.rpath.params[["model"]][["Recreational"]][52:62] <-NA
 
-#adjust scallop predation
-
 #redo copepods
-source(here("Sarah_R/redo_copepods.R"))
+source(here("Sarah_R/redo_copes_start.R"))
 
-
-check.rpath.params(MAB.rpath.params)
-
-
-rpath(MAB.rpath.params, eco.name = "Mid-Atlantic Bight")
 
 
