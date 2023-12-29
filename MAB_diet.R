@@ -10,11 +10,12 @@
 ##
 ## Notes: This version is specific to the MABRpath model.
 ##
-# Thu Dec  7 09:15:17 2023 ------------------------------
+# Fri Dec 29 13:57:41 2023 ------------------------------
+
+
 
 
 ## Load packages
-
 library(readr) 
 library(data.table)
 #library(rgdal)
@@ -48,8 +49,8 @@ prey[PYCOMNAM == 'ACADIAN REDFISH',         RPATH := 'Redfish']
 prey[PYCOMNAM == 'POLLOCK',                 RPATH := 'OtherDemersals']
 prey[PYCOMNAM == 'OCEAN POUT',              RPATH := 'OceanPout']
 prey[PYCOMNAM == 'BLACK SEA BASS',          RPATH := 'BlackSeaBass']
-prey[PYCOMNAM == 'BLUEFISH',                RPATH := 'OtherPelagics']
-prey[PYCOMNAM == 'SCUP',                    RPATH := 'OtherDemersals']
+prey[PYCOMNAM == 'BLUEFISH',                RPATH := 'Bluefish']
+prey[PYCOMNAM == 'SCUP',                    RPATH := 'Scup']
 prey[PYCOMNAM == 'FOURSPOT FLOUNDER',       RPATH := 'Fourspot']
 prey[PYCOMNAM == 'SUMMER FLOUNDER',         RPATH := 'SummerFlounder']
 prey[PYCOMNAM == 'AMERICAN PLAICE',         RPATH := 'OtherDemersals']
@@ -73,6 +74,10 @@ prey[PYCOMNAM == 'TILEFISH',                RPATH := 'SouthernDemersals']
 prey[PYCOMNAM == 'ALEWIFE',                 RPATH := 'SmPelagics']
 prey[PYNAM == 'SELENE SETAPINNIS',          RPATH := 'SmPelagics']
 prey[PYNAM == 'EPIGONUS PANDIONIS',         RPATH := 'OtherDemersals']
+prey[PYCOMNAM == 'AMERICAN SHAD',              RPATH := 'AmShad']
+prey[PYCOMNAM == 'ATLANTIC CROAKER',           RPATH := 'AtlCroaker']
+prey[PYCOMNAM == 'WEAKFISH',                   RPATH := 'Weakfish']
+
 
 ## Species to groups
 prey[PYCOMNAM %in% c('SEA SCALLOP', 'SEA SCALLOP VISCERA','SCALLOPS',
@@ -150,7 +155,6 @@ prey[is.na(RPATH) & MODCAT == 'OTHER', RPATH := 'NotUsed'] #Plants and Parasites
 #Leftovers
 prey[AnalCom == 'SAND LANCES', RPATH := 'SmPelagics']
 prey[PYABBR %in% c('PERORD', 'MYOOCT'), RPATH := 'OtherDemersals']
-
 prey[PYABBR %in% c('CLUSCA', 'CLUHA2'), RPATH := 'AtlHerring']
 
 #Unidentified Stuff
@@ -194,6 +198,22 @@ MAB.fh <- MAB.fh[!Rprey %in% c('NotUsed', 'AR', 'UNKFish', 'UNKSkate'), ]
 
 #Remove Freshwater as predator
 MAB.fh <- MAB.fh[!Rpred %in% 'Freshwater', ]
+
+#Deal with prey items that were missing from prey data table
+MAB.fh <- MAB.fh[PYNAM == 'SYACIUM PAPILLOSUM',   Rprey := 'OtherDemersals']
+MAB.fh <- MAB.fh[PYNAM == 'DACTYLOPTERUS VOLITANS',     Rprey := 'OtherPelagics']
+MAB.fh <- MAB.fh[PYNAM == 'SCYLIORHINUS RETIFER', Rprey := 'Sharks']
+MAB.fh <- MAB.fh[PYNAM == 'ANTIGONIA CAPROS',     Rprey := 'OtherDemersals']
+MAB.fh <- MAB.fh[PYNAM == 'ANTHIAS NICHOLSI',     Rprey := 'SouthernDemersals']
+MAB.fh <- MAB.fh[PYNAM == 'SELENE SETAPINNIS',    Rprey := 'SmPelagics']
+MAB.fh <- MAB.fh[PYNAM == 'OGCOCEPHALIDAE',    Rprey := 'OtherDemersals']
+MAB.fh <- MAB.fh[PYNAM == 'STERNOPTYCHIDAE',    Rprey := 'Mesopelagics']
+MAB.fh <- MAB.fh[PYNAM == 'SYNAGROPS BELLUS',    Rprey := 'Mesopelagics']
+MAB.fh <- MAB.fh[PYNAM == 'PRIACANTHUS CRUENTATUS',    Rprey := 'SouthernDemersals']
+MAB.fh <- MAB.fh[PYNAM == 'PARASUDIS TRUCULENTA',    Rprey := 'Mesopelagics']
+MAB.fh <- MAB.fh[PYNAM == 'MONOLENE SESSILICAUDA',   Rprey := 'OtherDemersals']
+MAB.fh <- MAB.fh[PYNAM == 'PRIONOTUS ALATUS',    Rprey := 'SouthernDemersals']
+
 
 #Merge prey items
 setkey(MAB.fh, YEAR, SEASON, CRUISE6, STRATUM, STATION, TOW, Rpred, PDID, Rprey)

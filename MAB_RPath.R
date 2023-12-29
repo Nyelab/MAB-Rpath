@@ -121,7 +121,7 @@ MAB.rpath.params$model[, "Clam Dredge" := clam]
 
 ## Recreational
 source("MAB_rec_catch.R")
-rec_catch<-left_join(groups_fleets,MAB.mrip,by="RPATH")
+rec_catch<-left_join(groups_fleets,MAB.mrip_summary,by="RPATH")
 rec_catch<-as.vector(rec_catch$Per_Area)
 rec_catch[is.na(rec_catch)]<-0
 rec_catch[50:51]<-0
@@ -205,9 +205,9 @@ MAB.rpath
 webplot(MAB.rpath, labels = T)
 
 ## Save .csv file with model information
-write.Rpath(MAB.rpath, file="MAB_model.csv")
-write.csv(MAB.rpath.params$model, file="MAB_prebalance_model.csv")
-write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
+#write.Rpath(MAB.rpath, file="MAB_model.csv")
+#write.csv(MAB.rpath.params$model, file="MAB_prebalance_model.csv")
+#write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
 
 # ## Balance adjustments
 # MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
@@ -264,12 +264,12 @@ MAB.rpath.params$model$Biomass[21]<-MAB.rpath.params$model$Biomass[21]*50
 MAB.rpath.params$model$Biomass[9]<-MAB.rpath.params$model$Biomass[9]*2
 
 ## SmFlatfishes
-## Increase biomass by 10x (Lucey)
-MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*10
+## Increase biomass by 14x (Lucey)
+MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*14
 
 ## AtlMackerel
 ## Increase biomass by 16x (Lucey, Buccheister et al.)
-MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*20
+MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*16
 
 ## GelZooplankton
 ## Increase biomass by 2x (Prebal diagnostics)
@@ -296,8 +296,8 @@ MAB.rpath.params$model$Biomass[48]<-MAB.rpath.params$model$Biomass[48]*5
 MAB.rpath.params$model$Biomass[46]<-MAB.rpath.params$model$Biomass[46]*8
 
 ## SmPelagics
-## Increase biomass by 8x (Buccheister)
-MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*8
+## Increase biomass by 18x (Buchheister)
+MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*18
 
 ## LittleSkate
 ## Increase biomass by 5x (Lucey)
@@ -316,8 +316,8 @@ MAB.rpath.params$model$Biomass[47]<-MAB.rpath.params$model$Biomass[47]*8
 MAB.rpath.params$model$Biomass[22]<-MAB.rpath.params$model$Biomass[22]*2.5
 
 ## AtlScallop
-## Increase biomass by 4x (Lucey)
-MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*4
+## Increase biomass by 5x (Lucey)
+MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*5
 
 ## OtherSkates
 ## Increase biomass by 3x (Lucey)
@@ -343,6 +343,9 @@ MAB.rpath.params$model$Biomass[2]<-MAB.rpath.params$model$Biomass[2]*2
 ## Increase biomass by 1.5x (Lucey)
 MAB.rpath.params$model$Biomass[12]<-MAB.rpath.params$model$Biomass[12]*1.5
 
+##Weakfish
+##Increase biomass by 1.5x (Assessment)
+MAB.rpath.params$model$Biomass[45]<-MAB.rpath.params$model$Biomass[45]*1.5
 
 ## PB changes
 ## Bluefish
@@ -354,8 +357,8 @@ MAB.rpath.params$model$PB[9]<-MAB.rpath.params$model$PB[9]*2
 MAB.rpath.params$model$PB[15]<-MAB.rpath.params$model$PB[15]/2
 
 ## AtlMackerel
-## Decrease PB by 5x
-MAB.rpath.params$model$PB[4]<-MAB.rpath.params$model$PB[4]/5
+## Decrease PB by 2x
+MAB.rpath.params$model$PB[4]<-MAB.rpath.params$model$PB[4]/2
 
 ## GelZooplankton
 ## Increase PB by 10x (Lucey)
@@ -442,7 +445,7 @@ MAB.rpath.params$model$Trap[36]<-MAB.rpath.params$model$Trap[36]*0
 ## Reduce trap fishing
 MAB.rpath.params$model$Trap[29]<-MAB.rpath.params$model$Trap[29]*0
 ## Reduce recreational fishing by 0.01x
-MAB.rpath.params$model$Recreational[29]<-MAB.rpath.params$model$Recreational[29]*0.01
+#MAB.rpath.params$model$Recreational[29]<-MAB.rpath.params$model$Recreational[29]*0.01
 ## Reduce pelagic fishing by 0.1x
 MAB.rpath.params$model$Pelagic[29]<-MAB.rpath.params$model$Pelagic[29]*0.1
 
@@ -450,29 +453,34 @@ MAB.rpath.params$model$Pelagic[29]<-MAB.rpath.params$model$Pelagic[29]*0.1
 ## Reduce recreational fishing
 MAB.rpath.params$model$Recreational[9]<-MAB.rpath.params$model$Recreational[9]*.01
 
+## Scup
+## Reduce recreational fishing
+## SW addition
+#MAB.rpath.params$model$Recreational[34]<-MAB.rpath.params$model$Recreational[34]*0.05
+
 ## SouthernDemersals
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*.01
+#MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*.01
 ## Reduce trap fishing
 MAB.rpath.params$model$Trap[42]<-MAB.rpath.params$model$Trap[42]*.01
 
 ## BlackSeaBass
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*.01
+#MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*.01
 
 ## Cod
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.1
+#MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.1
 
 ## AtlMackerel
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.01
+#MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.01
 
 ## OtherDemersals
 ## Reduce trap fishing
 MAB.rpath.params$model$Trap[28]<-MAB.rpath.params$model$Trap[28]*.01
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[28]<-MAB.rpath.params$model$Recreational[28]*.01
+#MAB.rpath.params$model$Recreational[28]<-MAB.rpath.params$model$Recreational[28]*.01
 
 ## SilverHake
 ## Reduce SM Mesh fishing
@@ -480,15 +488,16 @@ MAB.rpath.params$model$`SM Mesh`[37]<-MAB.rpath.params$model$`SM Mesh`[37]*.1
 
 ## Weakfish
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[45]<-MAB.rpath.params$model$Recreational[45]*.01
+## SW added
+MAB.rpath.params$model$Recreational[45]<-MAB.rpath.params$model$Recreational[45]*.5
 
 ## RedHake
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[33]<-MAB.rpath.params$model$Recreational[33]*.01
+#MAB.rpath.params$model$Recreational[33]<-MAB.rpath.params$model$Recreational[33]*.01
 
 ## SummerFlounder
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[44]<-MAB.rpath.params$model$Recreational[44]*.1
+#MAB.rpath.params$model$Recreational[44]<-MAB.rpath.params$model$Recreational[44]*.1
 
 ## Mesopelagics
 ## Reduce trap fishing
@@ -677,6 +686,11 @@ MAB.rpath.params$diet[20,30]<-MAB.rpath.params$diet[20,30]+0.1
 MAB.rpath.params$diet[10,20]<-MAB.rpath.params$diet[10,20]-0.015
 MAB.rpath.params$diet[20,20]<-MAB.rpath.params$diet[20,20]+0.015
 
+## Relieve predation pressure on Weakfish
+## SW added
+## SouthernDemersals: Weakfish -4%, Macrobenthos +4%
+MAB.rpath.params$diet[45,43]<-MAB.rpath.params$diet[45,43]-0.04
+MAB.rpath.params$diet[20,43]<-MAB.rpath.params$diet[20,43]+0.04
 
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
@@ -686,3 +700,8 @@ EE[order(EE)]
 write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 #write.Rpath(MAB.rpath, file="MAB_model.csv")
 write.csv(MAB.rpath.params$diet, file = "MAB_diet.csv")
+
+#look at landings
+landings<-as.data.frame(MAB.rpath[["Landings"]])
+landings<-landings %>% mutate(total=rowSums(landings))
+landings <- landings %>% mutate(prop_rec = Recreational/total)

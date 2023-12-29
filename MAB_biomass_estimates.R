@@ -28,7 +28,7 @@ library(survdat)
 load(here("data/Survdat.RData"))
 load(here("data/Species_codes.RData"))
 
-#Calculate total GOM area
+#Calculate total MAB area
 area<-sf::st_read(dsn=system.file("extdata","strata.shp",package="survdat"))
 area<-get_area(areaPolygon = area, areaDescription="STRATA")
 MAB.area<-subset(area, area$STRATUM %in% MAB.strata)
