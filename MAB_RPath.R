@@ -705,3 +705,7 @@ write.csv(MAB.rpath.params$diet, file = "MAB_diet.csv")
 landings<-as.data.frame(MAB.rpath[["Landings"]])
 landings<-landings %>% mutate(total=rowSums(landings))
 landings <- landings %>% mutate(prop_rec = Recreational/total)
+
+#Save files
+save(MAB.rpath, file = "outputs/MAB_Rpath.RData")
+save(MAB.rpath.params,file = "outputs/MAB_params_Rpath.RData")
