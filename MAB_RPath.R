@@ -692,6 +692,9 @@ MAB.rpath.params$diet[20,20]<-MAB.rpath.params$diet[20,20]+0.015
 MAB.rpath.params$diet[45,43]<-MAB.rpath.params$diet[45,43]-0.04
 MAB.rpath.params$diet[20,43]<-MAB.rpath.params$diet[20,43]+0.04
 
+#add data pedigree
+source("Sarah_R/data_pedigree.R")
+
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
 source("MAB_prebal.R")
@@ -701,10 +704,12 @@ write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 #write.Rpath(MAB.rpath, file="MAB_model.csv")
 write.csv(MAB.rpath.params$diet, file = "MAB_diet.csv")
 
-#look at landings
-landings<-as.data.frame(MAB.rpath[["Landings"]])
-landings<-landings %>% mutate(total=rowSums(landings))
-landings <- landings %>% mutate(prop_rec = Recreational/total)
+# #look at landings
+# landings<-as.data.frame(MAB.rpath[["Landings"]])
+# landings<-landings %>% mutate(total=rowSums(landings))
+# landings <- landings %>% mutate(prop_rec = Recreational/total)
+
+
 
 #Save files
 save(MAB.rpath, file = "outputs/MAB_Rpath.RData")
