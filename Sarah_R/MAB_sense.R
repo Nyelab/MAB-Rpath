@@ -55,7 +55,7 @@ for (i in 1:length(fixers)){
 
 #Set up sense runs
 all_years <- 1:50
-scene <- rsim.scenario(GOM, GOM.params, years = all_years)
+scene <- rsim.scenario(MAB.rpath, MAB.rpath.params, years = all_years)
 orig.biomass<-scene$start_state$Biomass
 
 # ----- Set up ecosense generator ----- #######################################
@@ -66,17 +66,17 @@ kept <- rep(NA, NUM_RUNS)
 
 set.seed(19)
 for (irun in 1:NUM_RUNS){
-  GOMsense <- copy(scene)
+  MABsense <- copy(scene)
   # INSERT SENSE ROUTINE BELOW
-  parlist[[irun]] <- GOMsense$params 		# Base ecosim params
-  parlist[[irun]] <- rsim.sense(GOMsense, GOM.params)	# Replace the base params with Ecosense params  
-  #GOMsense$start_state$Biomass <- parlist[[irun]]$B_BaseRef #took out this line on May 2, 2022
+  parlist[[irun]] <- MABsense$params 		# Base ecosim params
+  parlist[[irun]] <- rsim.sense(MABsense, MAB.rpath.params)	# Replace the base params with Ecosense params  
+  #MABsense$start_state$Biomass <- parlist[[irun]]$B_BaseRef #took out this line on May 2, 2022
   parlist[[irun]]$BURN_YEARS <- 50			# Set Burn Years to 50
-  GOMsense$params <- parlist[[irun]]
-  GOMtest <- rsim.run(GOMsense, method = "RK4", years = all_years)
-  failList <- which((is.na(GOMtest$end_state$Biomass) | GOMtest$end_state$Biomass/orig.biomass > 1000 | GOMtest$end_state$Biomass/orig.biomass < 1/1000))
+  MABsense$params <- parlist[[irun]]
+  MABtest <- rsim.run(MABsense, method = "RK4", years = all_years)
+  failList <- which((is.na(MABtest$end_state$Biomass) | MABtest$end_state$Biomass/orig.biomass > 1000 | MABtest$end_state$Biomass/orig.biomass < 1/1000))
   {if (length(failList)>0)
-  {cat(irun,": fail in year ",GOMtest$crash_year,": ",failList,"\n"); kept[irun] <- F; flush.console()}
+  {cat(irun,": fail in year ",MABtest$crash_year,": ",failList,"\n"); kept[irun] <- F; flush.console()}
     else 
     {cat(irun,": success!\n"); kept[irun]<-T;  flush.console()}}
   parlist[[irun]]$BURN_YEARS <- 1
@@ -86,8 +86,7 @@ for (irun in 1:NUM_RUNS){
 KEPT <- which(kept==T)
 nkept <- length(KEPT)
 nkept
-GOM_sense <- parlist[KEPT]
-#GOM_sense<-parlist
+MAB_sense <- parlist[KEPT]
 
-save(GOM_sense, file = "outputs/GOM_sense_50k_2024.RData")
+save(MAB_sense, file = "outputs/MAB_sense_50k_2024.RData")
 
