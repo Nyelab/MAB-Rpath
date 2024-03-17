@@ -22,6 +22,13 @@ pedigree<-as.data.table(read.csv(here('data/MAB_data_pedigree.csv')))
 #Remove unneeded columns
 pedigree<-pedigree %>% dplyr::select(RPATH, Biomass, PB, QB, Diet)
 
+#Remove discards
+pedigree <- pedigree %>% filter(!RPATH == "Discards")
+
+#Remove pedigree inputs for fleets
+ngroups<-nliving <- nrow(MAB.rpath.params$model[Type <  3, ])
+MAB.rpath.params$pedigree <- MAB.rpath.params$pedigree[1:ngroups]
+
 #Biomass
 MAB.rpath.params$pedigree[, Biomass := pedigree$Biomass]
 

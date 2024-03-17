@@ -1,8 +1,8 @@
 
-## Script name: MAB_RPath.R
+## Script name: MAB_RPath_no_disc.R
 ##
 ## Purpose of script: Compile all data to create functional RPath model.
-##                    
+##                    Eliminate discards for purposes of ENA analyses
 ##
 ## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
@@ -10,7 +10,8 @@
 ## Email: sarah.j.weisberg@stonybrook.edu
 #
 
-# Fri Dec  8 16:54:53 2023 ------------------------------
+# Tue Jan 30 14:02:38 2024 ------------------------------
+
 
 ## Load libraries, packages and functions
 library(Rpath); library(data.table); library(dplyr); library(here)
@@ -19,13 +20,21 @@ library(Rpath); library(data.table); library(dplyr); library(here)
 
 ## Add functional groups to model and generate rpath params
 source(here("MAB_fleets.R"))
+#remove Discards from groups list
+groups_fleets <- groups_fleets %>% filter(RPATH != "Discards")
 groups<-as.vector(groups_fleets$RPATH)
-types<-c(rep(0,31),1,rep(0,17),rep(2,2),rep(3,11))
+types<-c(rep(0,31),1,rep(0,17),rep(2,1),rep(3,11))
 MAB.rpath.params<-create.rpath.params(group = groups, type = types)
 
 ## Add biomass estimates
 source(here("MAB_biomass_estimates.R"))
 biomass<-left_join(groups_fleets,MAB.biomass.80s,by = "RPATH")
+
+#Remove Discards 
+#biomass<-biomass %>% filter(RPATH !="Discards")
+#and set Detritus biomass to NA
+biomass[which(RPATH == "Detritus")]$Biomass<-NA
+#Convert biomass to vector
 biomass<-as.vector(biomass$Biomass)
 MAB.rpath.params$model[,Biomass:=biomass]
 
@@ -49,12 +58,12 @@ ba<-left_join(groups_fleets,ba,by = "RPATH")
 ba<-as.vector(ba$BA)
 MAB.rpath.params$model[,BioAcc:=ba]
 
-## Add unassimilated consumption
-MAB.rpath.params$model[, Unassim := c(rep(0.2,5),0.4,rep(0.2,6),0.4,rep(0.2,3),0.4,rep(0.2,6),0.4,rep(0.2,7),0,rep(0.2,5),0.4,rep(0.2,11),rep(0,2),rep(NA,11))]
+# Add unassimilated consumption
+MAB.rpath.params$model[, Unassim := c(rep(0.2,5),0.3,rep(0.2,6),0.3,rep(0.2,3),0.3,rep(0.2,6),0.3,rep(0.2,7),0,rep(0.2,5),0.3,rep(0.2,11),rep(0,1),rep(NA,11))]
 
 ## Add detrital fate and set discards to 0
-MAB.rpath.params$model[,Detritus:=c(rep(1,49),rep(0,13))]
-MAB.rpath.params$model[,Discards:=c(rep(0,51),rep(1,11))]
+MAB.rpath.params$model[,Detritus:=c(rep(1,49),rep(0,12))]
+#MAB.rpath.params$model[,Discards:=c(rep(0,51),rep(1,11))]
 
 ## Add landings by gear type
 source("MAB_discards.R")
@@ -62,61 +71,61 @@ source("MAB_discards.R")
 ## Fixed Gear
 fixed<-left_join(groups_fleets,fixed,by="RPATH")
 fixed<-as.vector(fixed$landings)
-fixed[50:51]<-0
+fixed[50]<-0
 MAB.rpath.params$model[,"Fixed Gear":=fixed]
 
 ## Large Mesh
 lg_mesh<-left_join(groups_fleets,lg_mesh,by="RPATH")
 lg_mesh<-as.vector(lg_mesh$landings)
-lg_mesh[50:51]<-0
+lg_mesh[50]<-0
 MAB.rpath.params$model[, "LG Mesh" := lg_mesh]
 
 ## Other
 other<-left_join(groups_fleets,other,by="RPATH")
 other<-as.vector(other$landings)
-other[50:51]<-0
+other[50]<-0
 MAB.rpath.params$model[, "Other" := other]
 
 ## Small Mesh
 sm_mesh<-left_join(groups_fleets,sm_mesh,by="RPATH")
 sm_mesh<-as.vector(sm_mesh$landings)
-sm_mesh[50:51]<-0
+sm_mesh[50]<-0
 MAB.rpath.params$model[, "SM Mesh" := sm_mesh]
 
 ## Scallop Dredge
 scallop<-left_join(groups_fleets,scallop,by="RPATH")
 scallop<-as.vector(scallop$landings)
-scallop[50:51]<-0
+scallop[50]<-0
 MAB.rpath.params$model[, "Scallop Dredge" := scallop]
 
 ## Trap
 trap<-left_join(groups_fleets,trap,by="RPATH")
 trap<-as.vector(trap$landings)
-trap[50:51]<-0
+trap[50]<-0
 MAB.rpath.params$model[, "Trap" := trap]
 
 ## HMS Fleet
 hms<-left_join(groups_fleets,hms,by="RPATH")
 hms<-as.vector(hms$landings)
-hms[50:51]<-0
+hms[50]<-0
 MAB.rpath.params$model[, "HMS Fleet" := hms]
 
 ## Pelagic
 pelagic<-left_join(groups_fleets,pelagic,by="RPATH")
 pelagic<-as.vector(pelagic$landings)
-pelagic[50:51]<-0
+pelagic[50]<-0
 MAB.rpath.params$model[, "Pelagic" := pelagic]
 
 ## Other Dredge
 other_dredge<-left_join(groups_fleets,other_dredge,by="RPATH")
 other_dredge<-as.vector(other_dredge$landings)
-other_dredge[50:51]<-0
+other_dredge[50]<-0
 MAB.rpath.params$model[, "Other Dredge" := other_dredge]
 
 ## Clam
 clam<-left_join(groups_fleets,clam,by="RPATH")
 clam<-as.vector(clam$landings)
-clam[50:51]<-0
+clam[50]<-0
 MAB.rpath.params$model[, "Clam Dredge" := clam]
 
 ## Recreational
@@ -124,67 +133,8 @@ source("MAB_rec_catch.R")
 rec_catch<-left_join(groups_fleets,MAB.mrip_summary,by="RPATH")
 rec_catch<-as.vector(rec_catch$Per_Area)
 rec_catch[is.na(rec_catch)]<-0
-rec_catch[50:51]<-0
+rec_catch[50]<-0
 MAB.rpath.params$model[,"Recreational":=rec_catch]
-
-## Add discards by gear type
-## Fixed Gear
-fixed.d<-left_join(groups_fleets,fixed.d,by="RPATH")
-fixed.d<-as.vector(fixed.d$discards)
-fixed.d[50:51]<-0
-MAB.rpath.params$model[, "Fixed Gear.disc" := fixed.d]
-
-## Lg Mesh
-lg_mesh.d<-left_join(groups_fleets,lg_mesh.d,by="RPATH")
-lg_mesh.d<-as.vector(lg_mesh.d$discards)
-lg_mesh.d[50:51]<-0
-MAB.rpath.params$model[, "LG Mesh.disc" := lg_mesh.d]
-
-## Other
-other.d<-left_join(groups_fleets,other.d,by="RPATH")
-other.d<-as.vector(other.d$discards)
-other.d[50:51]<-0
-MAB.rpath.params$model[, "Other.disc" := other.d]
-
-## SM Mesh
-sm_mesh.d<-left_join(groups_fleets,sm_mesh.d,by="RPATH")
-sm_mesh.d<-as.vector(sm_mesh.d$discards)
-sm_mesh.d[50:51]<-0
-MAB.rpath.params$model[, "SM Mesh.disc" := sm_mesh.d]
-
-## Scallop Dredge
-scallop.d<-left_join(groups_fleets,scallop.d,by="RPATH")
-scallop.d<-as.vector(scallop.d$discards)
-scallop.d[50:51]<-0
-MAB.rpath.params$model[, "Scallop Dredge" := scallop.d]
-
-## Trap
-trap.d<-left_join(groups_fleets,trap.d,by="RPATH")
-trap.d<-as.vector(trap.d$discards)
-trap.d[50:51]<-0
-MAB.rpath.params$model[, "Trap.disc" := trap.d]
-
-## HMS
-hms.d<-left_join(groups_fleets,hms.d,by="RPATH")
-hms.d<-as.vector(hms.d$discards)
-hms.d[50:51]<-0
-MAB.rpath.params$model[, "HMS Fleet.disc" := hms.d]
-
-## Pelagic
-pelagic.d<-left_join(groups_fleets,pelagic.d,by="RPATH")
-pelagic.d<-as.vector(pelagic.d$discards)
-pelagic.d[50:51]<-0
-MAB.rpath.params$model[, "Pelagic.disc" := pelagic.d]
-
-## Other Dredge
-other_dredge.d<-left_join(groups_fleets,other_dredge.d,by="RPATH")
-other_dredge.d<-as.vector(other_dredge.d$discards)
-other_dredge.d[50:51]<-0
-MAB.rpath.params$model[, "Other Dredge.disc" := other_dredge.d]
-
-## Clam Dredge
-clam.d<-c(rep(0,49),rep(0,2),rep(NA,11))
-MAB.rpath.params$model[, "Clam Dredge.disc" := clam.d]
 
 ## Run diet matrix
 source(here("MAB_diet.R"))
@@ -194,29 +144,21 @@ source(here("MAB_diet_fill.R"))
 
 
 # Sarah_changes -----------------------------------------------------------
+#correct detritus, discards BA, should be 0
+#had been NA
+MAB.rpath.params[["model"]][["BioAcc"]][50] <- 0
 
-source(here("Sarah_R/rebalance.R"))
+#correct fishing matrix
+#fleets are catching other fleets
+#issue is with rec fishery
+MAB.rpath.params[["model"]][["Recreational"]][51:61] <-NA
+
+#adjust copepod groups
+source(here("Sarah_R/redo_copes_start.R"))
 
 ## Run model
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
-
-## Create webplot
-webplot(MAB.rpath, labels = T)
-
-## Save .csv file with model information
-#write.Rpath(MAB.rpath, file="MAB_model.csv")
-#write.csv(MAB.rpath.params$model, file="MAB_prebalance_model.csv")
-#write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
-
-# ## Balance adjustments
-# MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
-# MAB.rpath
-# source(here("MAB_prebal.R"))
-# EE<-MAB.rpath$EE
-# EE[order(EE)]
-# write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
-# #write.Rpath(MAB.rpath, file="MAB_model.csv")
 
 # Balancing changes -------------------
 ## OtherPelagics
@@ -318,7 +260,7 @@ MAB.rpath.params$model$Biomass[22]<-MAB.rpath.params$model$Biomass[22]*2.5
 
 ## AtlScallop
 ## Increase biomass by 5x (Lucey)
-MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*5
+MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*5.2
 
 ## OtherSkates
 ## Increase biomass by 3x (Lucey)
@@ -401,6 +343,9 @@ MAB.rpath.params$model$PB[47]<-MAB.rpath.params$model$PB[47]*0.6
 ## Decrease PB by 0.6x
 MAB.rpath.params$model$PB[48]<-MAB.rpath.params$model$PB[48]*0.6
 
+#decrease LgCopepods PB so Resp > 0
+#SW added
+MAB.rpath.params$model$PB[17]<- 61
 
 ## QB changes
 ## AtlMackerel
@@ -491,14 +436,6 @@ MAB.rpath.params$model$`SM Mesh`[37]<-MAB.rpath.params$model$`SM Mesh`[37]*.1
 ## Reduce recreational fishing
 ## SW added
 MAB.rpath.params$model$Recreational[45]<-MAB.rpath.params$model$Recreational[45]*.5
-
-## RedHake
-## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[33]<-MAB.rpath.params$model$Recreational[33]*.01
-
-## SummerFlounder
-## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[44]<-MAB.rpath.params$model$Recreational[44]*.1
 
 ## Mesopelagics
 ## Reduce trap fishing
@@ -700,14 +637,11 @@ source("Sarah_R/data_pedigree.R")
 
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
-source("MAB_prebal.R")
+#source("MAB_prebal.R")
 EE<-MAB.rpath$EE
 EE[order(EE)]
-#write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
-#write.Rpath(MAB.rpath, file="MAB_model.csv")
-#write.csv(MAB.rpath.params$diet, file = "MAB_diet.csv")
 
 
 #Save files
-save(MAB.rpath, file = "outputs/MAB_Rpath.RData")
-save(MAB.rpath.params,file = "outputs/MAB_params_Rpath.RData")
+save(MAB.rpath, file = "outputs/MAB_Rpath_no_disc.RData")
+save(MAB.rpath.params,file = "outputs/MAB_params_Rpath_no_disc.RData")
