@@ -278,7 +278,7 @@ MAB.rpath.params$model$Biomass[13]<-MAB.rpath.params$model$Biomass[13]*2
 
 ## SummerFlounder
 ## Increase biomass by 10x (Lucey, Buccheister et al.)
-MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*10
+#MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*10
 
 ## HMS
 ## Decrease biomass by 0.75x

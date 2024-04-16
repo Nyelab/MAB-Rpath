@@ -29,7 +29,7 @@ load("data/MAB_foodhabits.RData")
 source(here('MAB_biomass_estimates.R'))
 
 ## Run MAB_biomass_accumulation.R)
-source('MAB_biomass_accumulation.R')
+#source('MAB_biomass_accumulation.R')
 
 ## Match SASPREY and RPATH names
 ## Species to species
@@ -64,7 +64,7 @@ prey[PYCOMNAM == 'LITTLE SKATE',            RPATH := 'LittleSkate']
 prey[PYCOMNAM == 'NORTHERN SHORTFIN SQUID', RPATH := 'Illex']
 prey[PYNAM    == 'ILLEX SP',                RPATH := 'Illex']
 prey[PYCOMNAM == 'AMERICAN LOBSTER',        RPATH := 'AmLobster']
-prey[PYCOMNAM == 'KRILL',                   RPATH := 'Micronekton'] 
+prey[PYCOMNAM == 'KRILL',                   RPATH := 'Krill'] 
 prey[PYCOMNAM == 'EMPTY STOMACH',           RPATH := 'Empty']
 prey[PYCOMNAM == 'BLOWN STOMACH',           RPATH := 'Blown']
 prey[PYCOMNAM == 'NORTHERN SHRIMP',         RPATH := 'OtherShrimps']
@@ -77,6 +77,7 @@ prey[PYNAM == 'EPIGONUS PANDIONIS',         RPATH := 'OtherDemersals']
 prey[PYCOMNAM == 'AMERICAN SHAD',              RPATH := 'AmShad']
 prey[PYCOMNAM == 'ATLANTIC CROAKER',           RPATH := 'AtlCroaker']
 prey[PYCOMNAM == 'WEAKFISH',                   RPATH := 'Weakfish']
+prey[PYCOMNAM == 'ATLANTIC MENHADEN',                   RPATH := 'AtlMenhaden']
 
 
 ## Species to groups
@@ -105,7 +106,7 @@ prey[is.na(RPATH) & MODCAT == 'BENINV', RPATH := 'Macrobenthos']
 #MODCAT PELINV
 prey[is.na(RPATH) & Collcom == 'COMB JELLIES', RPATH := 'GelZooplankton']
 prey[PYCOMNAM == 'ROTIFERS', RPATH := 'Microzooplankton']
-prey[is.na(RPATH) & Collcom == 'KRILL', RPATH := 'Micronekton'] 
+prey[is.na(RPATH) & Collcom == 'KRILL', RPATH := 'Krill'] 
 prey[is.na(RPATH) & Collcom == 'COPEPODA', RPATH := 'LgCopepods']
 prey[is.na(RPATH) & MODCAT == 'PELINV', RPATH := 'Micronekton']
 
@@ -257,8 +258,7 @@ setkey(MAB.diet.survey, Rpred, preyper)
 MAB.diet.survey <- MAB.diet.survey[!Rpred %in% c('OtherDemersals','Sharks','SmPelagics','Loligo','Illex')]
 
 #Load in params table with biomass as previously calculated
-load("data/MAB_params.RData")
-all.groups <- as.data.table(MAB.Params[,c(1,2,3)])
+all.groups <- MAB.biomass.80s
 
 #Add EMAX classifications to RPATH groups
 convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMackerel','AtlScallop',
@@ -271,7 +271,7 @@ convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMacke
                                      'SeaBirds','Sharks','Sharks','SilverHake','SmCopepods','SmFlatfishes',
                                      'SmoothDogfish','SmPelagics','SouthernDemersals','SpinyDogfish',
                                      'SummerFlounder','Weakfish','Windowpane',
-                                     'WinterFlounder','WinterSkate','YTFlounder','Discards','Detritus'),
+                                     'WinterFlounder','WinterSkate','YTFlounder','Krill','AtlMenhaden','Discards','Detritus'),
                            
                            EMAX = c('Megabenthos- other','Small Pelagics- commercial','Demersals- benthivores',
                                     'Small Pelagics- commercial','Megabenthos- filterers','Bacteria',
@@ -285,7 +285,7 @@ convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMacke
                                     'Demersals- benthivores','Sea Birds','Sharks- pelagics','Sharks- coastal','Demersals- piscivores','Small copepods',
                                     'Demersals- benthivores','Demersals- piscivores','Small Pelagics- other','Demersals- benthivores',
                                     'Demersals- piscivores','Demersals- piscivores','Demersals- benthivores','Demersals- benthivores',
-                                    'Demersals- benthivores','Demersals- omnivores','Demersals- benthivores','Discard','Detritus-POC'))
+                                    'Demersals- benthivores','Demersals- omnivores','Demersals- benthivores','Micronekton','Small Pelagics- other','Discard','Detritus-POC'))
 all.groups<-merge(all.groups,convert.groups,by = 'RPATH')
 
 #Remove EMAX:RPATH many:1s
@@ -455,6 +455,19 @@ setnames(micronekton, c('RPATH', 'V1'), c('Rprey', 'preyper'))
 
 MAB.diet.EMAX<-rbindlist(list(MAB.diet.EMAX,micronekton))
 
+#Krill
+#Use micronekton diet from EMAX
+krill <- EMAX.params[, list(diet.Micronekton,diet.Group)]
+setnames(krill,'diet.Group','EMAX')
+krill <- merge(krill, all.groups[, list(RPATH, EMAX, Rpath.prop)], by = 'EMAX')
+krill[, preyper := diet.Micronekton * Rpath.prop]
+#Need to sum many:1 EMAX:Rpath
+krill <- krill[, sum(preyper), by = RPATH]
+krill[, Rpred := 'Krill']
+setnames(krill, c('RPATH', 'V1'), c('Rprey', 'preyper'))
+
+MAB.diet.EMAX<-rbindlist(list(MAB.diet.EMAX,krill))
+
 #OtherPelagics
 # otherpel <- EMAX.params[, list(diet.Medium.Pelagics...piscivores...other.,diet.Group)]
 # setnames(otherpel,'diet.Group','EMAX')
@@ -575,6 +588,18 @@ setnames(smpel, c('RPATH', 'V1'), c('Rprey', 'preyper'))
 
 MAB.diet.EMAX<-rbindlist(list(MAB.diet.EMAX,smpel))
 
+#Menhaden - use diet from Small Pelagics- other
+men <- EMAX.params[, list(diet.Small.Pelagics..other,diet.Group)]
+setnames(men,'diet.Group','EMAX')
+men <- merge(men, all.groups[, list(RPATH, EMAX, Rpath.prop)], by = 'EMAX')
+men[, preyper := diet.Small.Pelagics..other * Rpath.prop]
+#Need to sum many:1 EMAX:Rpath
+men <- men[, sum(preyper), by = RPATH]
+men[,Rpred := 'AtlMenhaden']
+setnames(men, c('RPATH', 'V1'), c('Rprey', 'preyper'))
+
+MAB.diet.EMAX<-rbindlist(list(MAB.diet.EMAX,men))
+
 #Bacteria
 bacteria <- EMAX.params[, list(diet.Bacteria,diet.Group)]
 setnames(bacteria,'diet.Group','EMAX')
@@ -654,3 +679,4 @@ MAB.diet <- rbindlist(list(MAB.diet.survey, MAB.diet.EMAX), use.names = T)
 
 #Output results
 save(MAB.diet, file = 'data/MAB_diet.RData')
+

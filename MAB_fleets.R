@@ -9,7 +9,7 @@
 ##
 ## Email: brandon.beltz@stonybrook.edu
 
-# Fri Dec  8 16:55:53 2023 ------------------------------
+# Tue Apr 16 12:05:00 2024 ------------------------------
 
 
 ## Load libraries, packages and functions
@@ -31,7 +31,7 @@ groups_fleets<-rbind(MAB.groups,dis_det_cols)
 MAB.fleets<-as.data.table(unique(mean.land$FLEET))
 colnames(MAB.fleets)<-"RPATH"
 
-## Bind fleets and model functional groups
-rec<-data.frame("Recreational")
-names(rec)<-c("RPATH")
-groups_fleets<-rbind(groups_fleets,MAB.fleets,rec)
+## Add rec & purse seine fleets
+rec_men<-data.frame(rbind("Recreational","PurseSeine"))
+names(rec_men)<-c("RPATH")
+groups_fleets<-rbind(groups_fleets,MAB.fleets,rec_men)

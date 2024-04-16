@@ -10,7 +10,8 @@
 ## Email: sarah.j.weisberg@stonybrook.edu
 #
 
-# Tue Jan 30 14:02:38 2024 ------------------------------
+# Mon Apr 15 15:29:42 2024 ------------------------------
+
 
 
 ## Load libraries, packages and functions
@@ -23,7 +24,7 @@ source(here("MAB_fleets.R"))
 #remove Discards from groups list
 groups_fleets <- groups_fleets %>% filter(RPATH != "Discards")
 groups<-as.vector(groups_fleets$RPATH)
-types<-c(rep(0,31),1,rep(0,17),rep(2,1),rep(3,11))
+types<-c(rep(0,31),1,rep(0,19),rep(2,1),rep(3,12))
 MAB.rpath.params<-create.rpath.params(group = groups, type = types)
 
 ## Add biomass estimates
@@ -31,7 +32,7 @@ source(here("MAB_biomass_estimates.R"))
 biomass<-left_join(groups_fleets,MAB.biomass.80s,by = "RPATH")
 
 #Remove Discards 
-#biomass<-biomass %>% filter(RPATH !="Discards")
+biomass<-biomass %>% filter(RPATH !="Discards")
 #and set Detritus biomass to NA
 biomass[which(RPATH == "Detritus")]$Biomass<-NA
 #Convert biomass to vector
@@ -52,17 +53,23 @@ qb<-as.vector(qb$MAB.QB)
 MAB.rpath.params$model[,QB:=qb]
 
 ## Add biomass accumulation
-ba<-cbind(MAB.groups,MAB.Params$BA)
-colnames(ba)[2]<-"BA"
+ba<-cbind(MAB.groups,MAB.BA)
+#colnames(ba)[2]<-"BA"
 ba<-left_join(groups_fleets,ba,by = "RPATH")
 ba<-as.vector(ba$BA)
 MAB.rpath.params$model[,BioAcc:=ba]
 
 # Add unassimilated consumption
-MAB.rpath.params$model[, Unassim := c(rep(0.2,5),0.3,rep(0.2,6),0.3,rep(0.2,3),0.3,rep(0.2,6),0.3,rep(0.2,7),0,rep(0.2,5),0.3,rep(0.2,11),rep(0,1),rep(NA,11))]
+MAB.rpath.params$model[, Unassim := c(rep(0.2,52),rep(NA,12))]
+#Increase unassim to 0.4 for zooplankton
+MAB.rpath.params$model[Group %in% c('Microzooplankton', 'SmCopepods', 'LgCopepods'), Unassim := 0.4]
+
+#Increase unassim to 0.3 for other detritavores
+MAB.rpath.params$model[Group %in% c('AmLobster', 'Macrobenthos', 'Megabenthos', 
+                                 'AtlScallop', 'OtherShrimps'), Unassim := 0.3]
 
 ## Add detrital fate and set discards to 0
-MAB.rpath.params$model[,Detritus:=c(rep(1,49),rep(0,12))]
+MAB.rpath.params$model[,Detritus:=c(rep(1,52),rep(0,12))]
 #MAB.rpath.params$model[,Discards:=c(rep(0,51),rep(1,11))]
 
 ## Add landings by gear type
@@ -71,61 +78,61 @@ source("MAB_discards.R")
 ## Fixed Gear
 fixed<-left_join(groups_fleets,fixed,by="RPATH")
 fixed<-as.vector(fixed$landings)
-fixed[50]<-0
+fixed[52]<-0
 MAB.rpath.params$model[,"Fixed Gear":=fixed]
 
 ## Large Mesh
 lg_mesh<-left_join(groups_fleets,lg_mesh,by="RPATH")
 lg_mesh<-as.vector(lg_mesh$landings)
-lg_mesh[50]<-0
+lg_mesh[52]<-0
 MAB.rpath.params$model[, "LG Mesh" := lg_mesh]
 
 ## Other
 other<-left_join(groups_fleets,other,by="RPATH")
 other<-as.vector(other$landings)
-other[50]<-0
+other[52]<-0
 MAB.rpath.params$model[, "Other" := other]
 
 ## Small Mesh
 sm_mesh<-left_join(groups_fleets,sm_mesh,by="RPATH")
 sm_mesh<-as.vector(sm_mesh$landings)
-sm_mesh[50]<-0
+sm_mesh[52]<-0
 MAB.rpath.params$model[, "SM Mesh" := sm_mesh]
 
 ## Scallop Dredge
 scallop<-left_join(groups_fleets,scallop,by="RPATH")
 scallop<-as.vector(scallop$landings)
-scallop[50]<-0
+scallop[52]<-0
 MAB.rpath.params$model[, "Scallop Dredge" := scallop]
 
 ## Trap
 trap<-left_join(groups_fleets,trap,by="RPATH")
 trap<-as.vector(trap$landings)
-trap[50]<-0
+trap[52]<-0
 MAB.rpath.params$model[, "Trap" := trap]
 
 ## HMS Fleet
 hms<-left_join(groups_fleets,hms,by="RPATH")
 hms<-as.vector(hms$landings)
-hms[50]<-0
+hms[52]<-0
 MAB.rpath.params$model[, "HMS Fleet" := hms]
 
 ## Pelagic
 pelagic<-left_join(groups_fleets,pelagic,by="RPATH")
 pelagic<-as.vector(pelagic$landings)
-pelagic[50]<-0
+pelagic[52]<-0
 MAB.rpath.params$model[, "Pelagic" := pelagic]
 
 ## Other Dredge
 other_dredge<-left_join(groups_fleets,other_dredge,by="RPATH")
 other_dredge<-as.vector(other_dredge$landings)
-other_dredge[50]<-0
+other_dredge[52]<-0
 MAB.rpath.params$model[, "Other Dredge" := other_dredge]
 
 ## Clam
 clam<-left_join(groups_fleets,clam,by="RPATH")
 clam<-as.vector(clam$landings)
-clam[50]<-0
+clam[52]<-0
 MAB.rpath.params$model[, "Clam Dredge" := clam]
 
 ## Recreational
@@ -133,8 +140,12 @@ source("MAB_rec_catch.R")
 rec_catch<-left_join(groups_fleets,MAB.mrip_summary,by="RPATH")
 rec_catch<-as.vector(rec_catch$Per_Area)
 rec_catch[is.na(rec_catch)]<-0
-rec_catch[50]<-0
+rec_catch[52]<-0
 MAB.rpath.params$model[,"Recreational":=rec_catch]
+
+#Manually add menhaden catch (SW)
+purse_catch<-c(rep(0,50),0.35,rep(0,13))
+MAB.rpath.params$model[,"PurseSeine":=purse_catch]
 
 ## Run diet matrix
 source(here("MAB_diet.R"))

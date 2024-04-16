@@ -59,9 +59,9 @@ spp <- spp[RPATH == 'RiverHerring', RPATH := 'SmPelagics']
 spp <- spp[RPATH == 'Tilefish', RPATH := 'SouthernDemersals']
 spp <- spp[RPATH == 'WitchFlounder', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'WhiteHake', RPATH := 'OtherDemersals']
+#spp <- spp[SCINAME == 'BREVOORTIA', RPATH := 'AtlMenhaden']
 
 #Calculate swept area biomass
-#GOM strata
 #Fall season only
 swept<-calc_swept_area(surveyData=survdat, areaPolygon = 'NEFSC strata', areaDescription = 'STRATA', 
                        filterByArea = MAB.strata, filterBySeason= "FALL", 
@@ -135,6 +135,13 @@ MAB.EMAX<-MAB.EMAX[RPATH == 'Sharks', Biomass:=SharksBiomass,]
 BenthosBiomass<-MAB.EMAX[RPATH == 'Macrobenthos', sum(Biomass),]
 MAB.EMAX<-MAB.EMAX[RPATH == 'Macrobenthos', Biomass:=BenthosBiomass,]
 
+##Assign a portion of micronekton biomass to krill
+#SW added
+krill_prop<-0.1612
+KrillBiomass<-MAB.EMAX[RPATH == 'Micronekton', Biomass]*krill_prop
+MAB.EMAX<-MAB.EMAX[RPATH == 'Micronekton', Biomass := Biomass*(1-krill_prop)]
+MAB.EMAX<-rbind(MAB.EMAX,list("Krill",KrillBiomass))
+
 ## Remove unused groups
 MAB.EMAX<-MAB.EMAX[RPATH %notin% c('Larval-juv fish- all','Shrimp et al.','Mega','Pelagics','Demersals','Discard','Detritus-POC','Fishery'),]
 MAB.EMAX<-unique(MAB.EMAX)
@@ -144,6 +151,10 @@ MAB.biomass.80s<-merge(MAB.groups,MAB.EMAX,by='RPATH', all=TRUE)
 MAB.biomass.80s<-MAB.biomass.80s[is.na(Biomass.y) , Biomass.y := Biomass.x]
 MAB.biomass.80s<-MAB.biomass.80s[,Biomass.x :=NULL]
 setnames(MAB.biomass.80s,"Biomass.y","Biomass")
+
+##Manually add menhaden biomass - based on Chagaris et al. (2020)
+##Assuming 10% of menhaden biomass is in relevant MAB area
+MAB.biomass.80s<-MAB.biomass.80s[RPATH == "AtlMenhaden", Biomass :=1.775190819]
 
 ## Output to .RData
 save(MAB.biomass.80s, file = 'data/MAB_biomass_estimates.RData')

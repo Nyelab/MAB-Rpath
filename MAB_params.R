@@ -19,8 +19,14 @@ load("data/MAB_params.RData")
 source(here('MAB_basic_inputs.R'))
 
 ## Remove unnecessary annotations from MAB_params.RData
-params<-MAB.Params[,c("RPATH","PB","QB")]
+params<-MAB.Params[,c("RPATH","PB","QB","BA")]
+
+##Manually add parameter values for krill, menhaden
+krill_men<-cbind(c("Krill","AtlMenhaden"),c(14.25,1.45),c(141.8938065,3.804),c(0,0))
+colnames(krill_men)<-c("RPATH","PB","QB","BA")
+params<-rbind(params,krill_men)
 
 ## Convert PB and QB values into vectors
 MAB.PB<-params[,"PB"]
 MAB.QB<-params[,"QB"]
+MAB.BA<-params[,"BA"]
