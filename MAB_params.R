@@ -25,8 +25,9 @@ params<-MAB.Params[,c("RPATH","PB","QB","BA")]
 krill_men<-cbind(c("Krill","AtlMenhaden"),c(14.25,1.45),c(141.8938065,3.804),c(0,0))
 colnames(krill_men)<-c("RPATH","PB","QB","BA")
 params<-rbind(params,krill_men)
+params <- params %>% mutate(PB=as.numeric(PB),QB=as.numeric(QB),BA=as.numeric(BA))
 
-## Convert PB and QB values into vectors
-MAB.PB<-params[,"PB"]
-MAB.QB<-params[,"QB"]
-MAB.BA<-params[,"BA"]
+# ## Convert PB and QB values into vectors
+# MAB.PB<-params[,"PB"]
+# MAB.QB<-params[,"QB"]
+# MAB.BA<-params[,"BA"]

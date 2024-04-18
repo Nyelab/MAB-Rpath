@@ -122,7 +122,7 @@ MAB.EMAX<-MAB.EMAX[RPATH %like% 'Macro', RPATH:='Macrobenthos',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Baleen', RPATH := 'BaleenWhales',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Gel',RPATH := 'GelZooplankton',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Phyto', RPATH :='Phytoplankton',]
-MAB.EMAX<-MAB.EMAX[RPATH %like% 'Megabenthos',RPATH := 'Mega',]
+MAB.EMAX<-MAB.EMAX[RPATH %like% 'Megabenthos',RPATH := 'Megabenthos',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Pelagics',RPATH := 'Pelagics',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Demersals',RPATH := 'Demersals',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Sharks', RPATH :='Sharks']
@@ -135,15 +135,19 @@ MAB.EMAX<-MAB.EMAX[RPATH == 'Sharks', Biomass:=SharksBiomass,]
 BenthosBiomass<-MAB.EMAX[RPATH == 'Macrobenthos', sum(Biomass),]
 MAB.EMAX<-MAB.EMAX[RPATH == 'Macrobenthos', Biomass:=BenthosBiomass,]
 
+## Aggregate EMAX megabenthos
+MegaBiomass<-MAB.EMAX[RPATH == 'Megabenthos', sum(Biomass),]
+MAB.EMAX<-MAB.EMAX[RPATH == 'Megabenthos', Biomass:=MegaBiomass,]
+
 ##Assign a portion of micronekton biomass to krill
 #SW added
-krill_prop<-0.1612
+krill_prop<-0.15
 KrillBiomass<-MAB.EMAX[RPATH == 'Micronekton', Biomass]*krill_prop
 MAB.EMAX<-MAB.EMAX[RPATH == 'Micronekton', Biomass := Biomass*(1-krill_prop)]
 MAB.EMAX<-rbind(MAB.EMAX,list("Krill",KrillBiomass))
 
 ## Remove unused groups
-MAB.EMAX<-MAB.EMAX[RPATH %notin% c('Larval-juv fish- all','Shrimp et al.','Mega','Pelagics','Demersals','Discard','Detritus-POC','Fishery'),]
+MAB.EMAX<-MAB.EMAX[RPATH %notin% c('Larval-juv fish- all','Shrimp et al.','Pelagics','Demersals','Discard','Detritus-POC','Fishery'),]
 MAB.EMAX<-unique(MAB.EMAX)
 
 ## Combine survey and EMAX biomass estimates

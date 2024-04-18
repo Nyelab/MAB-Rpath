@@ -28,6 +28,12 @@ MAB.RPATH <- MAB.RPATH[!MAB.RPATH %in% c(NA,"Fauna")]
 #Remove units
 total.biomass$biomass.t_area<-as.numeric(total.biomass$biomass.t_area)
 
+total.biomass %>% filter(RPATH == "Cod") %>%
+  ggplot(aes(x=YEAR,y=biomass.t_area))+
+  geom_point()
+
+lm<-lm(biomass.t_area~YEAR, data = subset(total.biomass, RPATH == "Cod" & YEAR <1985))
+
 ## Run linear model for all functional groups
 ba<-c()
 p<-c()
