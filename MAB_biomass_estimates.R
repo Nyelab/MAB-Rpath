@@ -20,8 +20,9 @@
 
 library(data.table)
 library(here)
-#remotes::install_github('NOAA-EDAB/survdat')
+remotes::install_github('NOAA-EDAB/survdat')
 library(survdat)
+library(lwgeom)
 '%notin%' <-Negate('%in%')
 
 ## Load Survdat, species list and strata

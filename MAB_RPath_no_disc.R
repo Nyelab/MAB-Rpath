@@ -53,7 +53,7 @@ MAB.rpath.params$model[,QB:=qb]
 ba<-as.vector(params$BA)
 ba[is.na(ba)]<-0
 #manually add ba term for cod
-ba[11]<-(-0.09)
+ba[11]<-(-0.05)
 ba[53:64]<-NA 
 MAB.rpath.params$model[,BioAcc:=ba]
 
@@ -168,11 +168,17 @@ source(url("https://github.com/NOAA-EDAB/GBRpath/blob/master/R/PreBal.R?raw=true
 
 ## OtherPelagics
 ## Increase biomass by 200x (Lucey, Link, Buccheister et al.)
-MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*200
+#MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*200
+#OR set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[29]<-NA
+MAB.rpath.params$model$EE[29]<-0.85
 
 ## OtherCephalopods
 ## Increase biomass by 1000x (Prebal diagnostics)
-MAB.rpath.params$model$Biomass[27]<-MAB.rpath.params$model$Biomass[27]*1000
+#MAB.rpath.params$model$Biomass[27]<-MAB.rpath.params$model$Biomass[27]*1000
+#OR set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[27]<-NA
+MAB.rpath.params$model$EE[27]<-0.5
 
 ## SpinyDogfish
 ## Decrease biomass by 0.8x (Lucey, Buccheister et al.)
@@ -180,7 +186,10 @@ MAB.rpath.params$model$Biomass[43]<-MAB.rpath.params$model$Biomass[43]*.8
 
 ## OtherDemersals
 ## Increase biomass by 200x
-MAB.rpath.params$model$Biomass[28]<-MAB.rpath.params$model$Biomass[28]*200
+#MAB.rpath.params$model$Biomass[28]<-MAB.rpath.params$model$Biomass[28]*200
+#OR set EE to 0.9 like Sean
+MAB.rpath.params$model$Biomass[28]<-NA
+MAB.rpath.params$model$EE[28]<-0.9
 
 ## Sharks
 ## Increase biomass by 2x
@@ -196,7 +205,10 @@ MAB.rpath.params$model$Biomass[42]<-MAB.rpath.params$model$Biomass[42]*5
 
 ## OtherShrimps
 ## Increase biomass by 220x (Buccheister et al., EMAX; Prebal diagnostics)
-MAB.rpath.params$model$Biomass[30]<-MAB.rpath.params$model$Biomass[30]*220
+#MAB.rpath.params$model$Biomass[30]<-MAB.rpath.params$model$Biomass[30]*220
+#OR set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[30]<-NA
+MAB.rpath.params$model$EE[30]<-0.85
 
 ## Bluefish
 ## Increase biomass by 3.25x
@@ -204,7 +216,10 @@ MAB.rpath.params$model$Biomass[9]<-MAB.rpath.params$model$Biomass[9]*3.25
 
 ## SmFlatfishes
 ## Increase biomass by 25
-MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*25
+#MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*25
+#OR set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[39]<-NA
+MAB.rpath.params$model$EE[39]<-0.85
 
 ## AtlMackerel
 ## Increase biomass by 16x (Lucey, Buccheister et al.)
@@ -236,7 +251,10 @@ MAB.rpath.params$model$Biomass[46]<-MAB.rpath.params$model$Biomass[46]*3
 
 ## SmPelagics
 ## Increase biomass by 18x (Buchheister)
-MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*18
+#MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*18
+#OR set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[41]<-NA
+MAB.rpath.params$model$EE[41]<-0.85
 
 ## LittleSkate
 ## Increase biomass by 2x (Lucey)
@@ -252,7 +270,10 @@ MAB.rpath.params$model$Biomass[47]<-MAB.rpath.params$model$Biomass[47]*2
 
 ## Mesopelagics
 ## Increase biomass by 2.5x (Prebal diagnostics)
-MAB.rpath.params$model$Biomass[22]<-MAB.rpath.params$model$Biomass[22]*2.5
+#MAB.rpath.params$model$Biomass[22]<-MAB.rpath.params$model$Biomass[22]*2.5
+#OR set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[22]<-NA
+MAB.rpath.params$model$EE[22]<-0.85
 
 ## AtlScallop
 ## Increase biomass by 3.5x (Lucey)
@@ -260,7 +281,10 @@ MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*3.5
 
 ## OtherSkates
 ## Increase biomass by 1.7x
-MAB.rpath.params$model$Biomass[31]<-MAB.rpath.params$model$Biomass[31]*1.7
+#MAB.rpath.params$model$Biomass[31]<-MAB.rpath.params$model$Biomass[31]*1.7
+#Or set EE to 0.85 like Sean
+MAB.rpath.params$model$Biomass[31]<-NA
+MAB.rpath.params$model$EE[31]<-0.85
 
 ## Odontocetes
 ## Increase biomass by 1.5x (Lucey)
@@ -397,7 +421,7 @@ MAB.rpath.params$model[Group=="Goosefish",QB:=2.2]
 # ## Fishing changes
 # ## Sharks
 # ## Reduce recreational pressure
-MAB.rpath.params$model$Recreational[36]<-MAB.rpath.params$model$Recreational[36]*0.25
+#MAB.rpath.params$model$Recreational[36]<-MAB.rpath.params$model$Recreational[36]*0.25
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[36]<-MAB.rpath.params$model$Trap[36]*0
 # ## OtherPelagics
@@ -410,7 +434,7 @@ MAB.rpath.params$model$Trap[29]<-MAB.rpath.params$model$Trap[29]*0
 # 
 # ## Bluefish
 # ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[9]<-MAB.rpath.params$model$Recreational[9]*0.4
+#MAB.rpath.params$model$Recreational[9]<-MAB.rpath.params$model$Recreational[9]*0.4
 # 
 # ## Scup
 # ## Reduce recreational fishing
@@ -419,21 +443,21 @@ MAB.rpath.params$model$Recreational[9]<-MAB.rpath.params$model$Recreational[9]*0
 # 
 # ## SouthernDemersals
 # ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*0.25
+#MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*0.25
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[42]<-MAB.rpath.params$model$Trap[42]*0
 # 
 # ## BlackSeaBass
 # ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*0.25
+#MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*0.25
 # 
 # ## Cod
 # ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.85
+#MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.85
 # 
 # ## AtlMackerel
 # ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.5
+#MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.5
 # 
 # ## OtherDemersals
 # ## Reduce trap fishing

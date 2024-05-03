@@ -30,8 +30,8 @@ colnames(species_key)[2]<-"SP_CODE"
 
 ## Subset MRIP data by state and area
 #MAB.mrip<-subset(MAB.mrip,MAB.mrip$ST == c(9,10,24,34,36,37,44,51) | MAB.mrip$AREA_X < 4, select=c(SP_CODE,WGT_AB1))
-
-MAB.mrip_filter<- MAB.mrip %>% filter(ST %in% c(9,10,24,34,36,37,44,51) | MAB.mrip$AREA_X < 4) %>%
+#SW changed
+MAB.mrip_filter<- MAB.mrip %>% filter(ST %in% c(9,10,24,34,36,37,44,51) & AREA_X < 4) %>%
   select(SP_CODE,WGT_AB1,YEAR)
 
 #filter for years 1980-1985
@@ -41,7 +41,7 @@ MAB.mrip_filter <-MAB.mrip_filter %>% filter(YEAR <= 1985)
 
 ## Merge with RPath names
 MAB.mrip_filter<-merge(MAB.mrip_filter,species_key,by = "SP_CODE")
-MAB.mrip_filter<-MAB.mrip_filter[,-1]
+#MAB.mrip_filter<-MAB.mrip_filter[,-1]
 
 ## Sum recreational catch for each RPath group by year
 MAB.mrip_summary<-MAB.mrip_filter %>%
