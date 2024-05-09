@@ -178,7 +178,7 @@ MAB.rpath.params$model$EE[29]<-0.85
 #MAB.rpath.params$model$Biomass[27]<-MAB.rpath.params$model$Biomass[27]*1000
 #OR set EE to 0.85 like Sean
 MAB.rpath.params$model$Biomass[27]<-NA
-MAB.rpath.params$model$EE[27]<-0.5
+MAB.rpath.params$model$EE[27]<-0.85
 
 ## SpinyDogfish
 ## Decrease biomass by 0.8x (Lucey, Buccheister et al.)
@@ -192,16 +192,12 @@ MAB.rpath.params$model$Biomass[28]<-NA
 MAB.rpath.params$model$EE[28]<-0.9
 
 ## Sharks
-## Increase biomass by 2x
-MAB.rpath.params$model$Biomass[36]<-MAB.rpath.params$model$Biomass[36]*2
+## Increase biomass by 3.15x
+MAB.rpath.params$model$Biomass[36]<-MAB.rpath.params$model$Biomass[36]*3.15
 
 ## BlackSeaBass
 ## Increase biomass by 7.5x 
 MAB.rpath.params$model$Biomass[8]<-MAB.rpath.params$model$Biomass[8]*7.5
-
-## SouthernDemersals
-## Increase biomass by 5x
-MAB.rpath.params$model$Biomass[42]<-MAB.rpath.params$model$Biomass[42]*5
 
 ## OtherShrimps
 ## Increase biomass by 220x (Buccheister et al., EMAX; Prebal diagnostics)
@@ -211,8 +207,8 @@ MAB.rpath.params$model$Biomass[30]<-NA
 MAB.rpath.params$model$EE[30]<-0.85
 
 ## Bluefish
-## Increase biomass by 3.25x
-MAB.rpath.params$model$Biomass[9]<-MAB.rpath.params$model$Biomass[9]*3.25
+## Increase biomass by 4x
+MAB.rpath.params$model$Biomass[9]<-MAB.rpath.params$model$Biomass[9]*4
 
 ## SmFlatfishes
 ## Increase biomass by 25
@@ -298,9 +294,9 @@ MAB.rpath.params$model$Biomass[37]<-MAB.rpath.params$model$Biomass[37]*2
 ## Increase biomass by 2.5x (Okey)
 MAB.rpath.params$model$Biomass[14]<-MAB.rpath.params$model$Biomass[14]*2.5
 
-## AmShad
-## Increase biomass by 2x (Prebal diagnostics)
-MAB.rpath.params$model$Biomass[2]<-MAB.rpath.params$model$Biomass[2]*2
+## RiverHerring
+## Increase biomass by 4x 
+MAB.rpath.params$model$Biomass[2]<-MAB.rpath.params$model$Biomass[2]*4
 
 ## Fourspot
 ## Increase biomass by 1.5x (Lucey)
@@ -338,9 +334,6 @@ MAB.rpath.params$model[Group == "GelZooplankton",PB := 35]
 ## Decrease PB by 2x (Lucey, Link et al.)
 MAB.rpath.params$model[Group=="Megabenthos",PB := PB/2]
 
-## RedHake
-## Decrease PB by 2x
-MAB.rpath.params$model[Group=="RedHake",PB := PB/2]
 
 ## SilverHake
 ## Decrease PB to 0.6
@@ -374,6 +367,7 @@ MAB.rpath.params$model[Group=="SouthernDemersals", PB := 1.14]
 MAB.rpath.params$model[Group=="SmFlatfishes",PB := 1.64]
 MAB.rpath.params$model[Group=="Sharks",PB := 0.16]
 MAB.rpath.params$model[Group=="LittleSkate",PB := 0.5]
+MAB.rpath.params$model[Group=="RedHake",PB := 0.45]
 
 #Changes below are to make invert groups more realistic
 MAB.rpath.params$model[Group=="OtherShrimps", PB := 2]
@@ -396,7 +390,7 @@ MAB.rpath.params$model[Group=="Odontocetes",QB := QB/2]
 
 ## RedHake
 ## Decrease QB by 4x (Lucey)
-#MAB.rpath.params$model$QB[33]<-MAB.rpath.params$model$QB[33]/4
+MAB.rpath.params$model$QB[33]<-MAB.rpath.params$model$QB[33]/4
 
 #Changes below made to keep GEs between 0.3 and 0.1 for fishes
 #SW
@@ -410,8 +404,11 @@ MAB.rpath.params$model[Group=="SpinyDogfish",QB:=1.16]
 MAB.rpath.params$model[Group=="SmoothDogfish",QB:=2.44]
 MAB.rpath.params$model[Group=="OceanPout", QB:=2]
 MAB.rpath.params$model[Group=="LittleSkate",QB:=1.4]
-MAB.rpath.params$model[Group=="Bluefish",QB:=3.85]
-MAB.rpath.params$model[Group=="Goosefish",QB:=2.2]
+MAB.rpath.params$model[Group=="Bluefish",QB:=3.5]
+MAB.rpath.params$model[Group=="Goosefish",QB:=1.22]
+MAB.rpath.params$model[Group=="RedHake",QB:=0.94]
+MAB.rpath.params$model[Group=="OtherPelagics",QB:=2]
+MAB.rpath.params$model[Group=="OtherSkates",QB:=1.1]
 
 #MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 ##GE
@@ -420,60 +417,22 @@ MAB.rpath.params$model[Group=="Goosefish",QB:=2.2]
 # 
 # ## Fishing changes
 # ## Sharks
-# ## Reduce recreational pressure
-#MAB.rpath.params$model$Recreational[36]<-MAB.rpath.params$model$Recreational[36]*0.25
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[36]<-MAB.rpath.params$model$Trap[36]*0
+# ## Reduce rec fishing
+MAB.rpath.params$model$Recreational[36]<-MAB.rpath.params$model$Recreational[36]*0.85
+
 # ## OtherPelagics
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[29]<-MAB.rpath.params$model$Trap[29]*0
-# ## Reduce recreational fishing by 0.01x
-# #MAB.rpath.params$model$Recreational[29]<-MAB.rpath.params$model$Recreational[29]*0.01
-# ## Reduce pelagic fishing by 0.1x
-# MAB.rpath.params$model$Pelagic[29]<-MAB.rpath.params$model$Pelagic[29]*0.1
-# 
-# ## Bluefish
-# ## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[9]<-MAB.rpath.params$model$Recreational[9]*0.4
-# 
-# ## Scup
-# ## Reduce recreational fishing
-# ## SW addition
-# #MAB.rpath.params$model$Recreational[34]<-MAB.rpath.params$model$Recreational[34]*0.05
-# 
 # ## SouthernDemersals
-# ## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*0.25
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[42]<-MAB.rpath.params$model$Trap[42]*0
-# 
-# ## BlackSeaBass
-# ## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*0.25
-# 
-# ## Cod
-# ## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.85
-# 
-# ## AtlMackerel
-# ## Reduce recreational fishing
-#MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.5
-# 
+
 # ## OtherDemersals
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[28]<-MAB.rpath.params$model$Trap[28]*.01
-# ## Reduce recreational fishing
-# #MAB.rpath.params$model$Recreational[28]<-MAB.rpath.params$model$Recreational[28]*.01
-# 
-# ## SilverHake
-# ## Reduce SM Mesh fishing
-# MAB.rpath.params$model$`SM Mesh`[37]<-MAB.rpath.params$model$`SM Mesh`[37]*.1
-# 
-# ## Weakfish
-# ## Reduce recreational fishing
-# ## SW added
-# MAB.rpath.params$model$Recreational[45]<-MAB.rpath.params$model$Recreational[45]*.5
-# 
+
 # ## Mesopelagics
 # ## Reduce trap fishing
 MAB.rpath.params$model$Trap[22]<-MAB.rpath.params$model$Trap[22]*.01
@@ -635,8 +594,8 @@ MAB.rpath.params$diet[20,44]<-MAB.rpath.params$diet[20,44]+0.015
 
 ## Relieve predation pressure on WinterSkate
 ## Macrobenthos: WinterSkate -0.003%, Macrobenthos +0.003%
-MAB.rpath.params$diet[48,21]<-MAB.rpath.params$diet[48,21]-0.000037
-MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]+0.000037
+# MAB.rpath.params$diet[48,21]<-MAB.rpath.params$diet[48,21]+0.000037
+# MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]-0.000037
 
 ## Relieve predation pressure on RedHake
 ## Macrobenthos: RedHake -0.004%, Macrobenthos +0.004%
@@ -685,12 +644,6 @@ MAB.rpath.params$diet[20,20]<-MAB.rpath.params$diet[20,20]+0.02
 ## Bluefish: Windowpane -1%, Macrobenthos +1%
 MAB.rpath.params$diet[46,10]<-MAB.rpath.params$diet[46,10]-0.01
 MAB.rpath.params$diet[20,10]<-MAB.rpath.params$diet[20,10]+0.01
-
-## Relieve predation pressure on Butterfish
-## OtherPelagics: Butterfish -10%, Macrobenthos +10%
-## SW removed -- this led to negative diet & was not needed to balance
-# MAB.rpath.params$diet[10,30]<-MAB.rpath.params$diet[10,30]-0.1
-# MAB.rpath.params$diet[20,30]<-MAB.rpath.params$diet[20,30]+0.1
 
 ## Loligo: Butterfish -1.5%, Macrobenthos +1.5%
 MAB.rpath.params$diet[10,20]<-MAB.rpath.params$diet[10,20]-0.015

@@ -71,10 +71,10 @@ prey[PYCOMNAM == 'NORTHERN SHRIMP',         RPATH := 'OtherShrimps']
 prey[PYCOMNAM == 'HORSESHOE CRAB',          RPATH := 'Megabenthos']
 prey[PYCOMNAM == 'RED DEEPSEA CRAB',        RPATH := 'Megabenthos']
 prey[PYCOMNAM == 'TILEFISH',                RPATH := 'SouthernDemersals']
-prey[PYCOMNAM == 'ALEWIFE',                 RPATH := 'SmPelagics']
+prey[PYCOMNAM == 'ALEWIFE',                 RPATH := 'RiverHerring']
 prey[PYNAM == 'SELENE SETAPINNIS',          RPATH := 'SmPelagics']
 prey[PYNAM == 'EPIGONUS PANDIONIS',         RPATH := 'OtherDemersals']
-prey[PYCOMNAM == 'AMERICAN SHAD',              RPATH := 'AmShad']
+prey[PYCOMNAM == 'AMERICAN SHAD',              RPATH := 'RiverHerring']
 prey[PYCOMNAM == 'ATLANTIC CROAKER',           RPATH := 'AtlCroaker']
 prey[PYCOMNAM == 'WEAKFISH',                   RPATH := 'Weakfish']
 prey[PYCOMNAM == 'ATLANTIC MENHADEN',                   RPATH := 'AtlMenhaden']
@@ -176,7 +176,7 @@ spp <- spp[RPATH == 'OtherFlatfish',  RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Pollock',        RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Rays',           RPATH := 'OtherSkates']
 spp <- spp[RPATH == 'RedCrab',        RPATH := 'Megabenthos']
-spp <- spp[RPATH == 'RiverHerring',   RPATH := 'SmPelagics']
+spp <- spp[RPATH == 'AmShad',         RPATH := 'RiverHerring']
 spp <- spp[RPATH == 'Tilefish',       RPATH := 'SouthernDemersals']
 spp <- spp[RPATH == 'WitchFlounder',  RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Barndoor',       RPATH := 'OtherDemersals']
@@ -261,7 +261,7 @@ MAB.diet.survey <- MAB.diet.survey[!Rpred %in% c('OtherDemersals','Sharks','SmPe
 all.groups <- MAB.biomass.80s
 
 #Add EMAX classifications to RPATH groups
-convert.groups<-data.table(RPATH = c('AmLobster','AmShad','AtlCroaker','AtlMackerel','AtlScallop',
+convert.groups<-data.table(RPATH = c('AmLobster','RiverHerring','AtlCroaker','AtlMackerel','AtlScallop',
                                      'Bacteria','BaleenWhales','BlackSeaBass','Bluefish','Butterfish',
                                      'Cod','Fourspot','GelZooplankton','Goosefish','HMS','Illex',
                                      'LgCopepods','LittleSkate','Loligo','Macrobenthos','Megabenthos',

@@ -56,7 +56,7 @@ spp <- spp[RPATH == 'OtherFlatfish', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Pollock', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Rays', RPATH := 'OtherSkates']
 spp <- spp[RPATH == 'RedCrab', RPATH := 'Megabenthos']
-spp <- spp[RPATH == 'RiverHerring', RPATH := 'SmPelagics']
+spp <- spp[RPATH == 'AmShad', RPATH := 'RiverHerring']
 spp <- spp[RPATH == 'Tilefish', RPATH := 'SouthernDemersals']
 spp <- spp[RPATH == 'WitchFlounder', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'WhiteHake', RPATH := 'OtherDemersals']
@@ -95,9 +95,13 @@ total.biomass<-merge(swept,spp[,list(SVSPP,RPATH,SCINAME,Fall.q)], by = 'SVSPP')
 ## Convert to b/a in mt/km^2
 total.biomass <- total.biomass[, biomass.t_area :=(tot.biomass*.001)/(Fall.q*MAB.area)]
 
-#Average for 1980-85
-MAB.biomass.80s <- total.biomass[YEAR %in% 1980:1985, mean(biomass.t_area), by = RPATH]
-setnames(MAB.biomass.80s,'V1','Biomass')
+#Sum by RPATH names
+#SW added
+setkey(total.biomass,RPATH,YEAR)
+summary.biomass <- total.biomass[, sum(biomass.t_area), by = key(total.biomass)]
+setnames(summary.biomass, 'V1','Biomass')
+MAB.biomass.80s<-summary.biomass[YEAR %in% 1980:1985, mean(Biomass), by=RPATH]
+setnames(MAB.biomass.80s, 'V1','Biomass')
 
 ##Save output
 save(MAB.biomass.80s, file = 'data/MAB_biomass_fall_80s.RData')
