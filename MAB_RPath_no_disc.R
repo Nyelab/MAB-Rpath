@@ -161,9 +161,6 @@ MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
 
 # Balancing changes -------------------
-source(url("https://github.com/NOAA-EDAB/GBRpath/blob/master/R/PreBal.R?raw=true"))
-
-
 # Biomass changes ---------------------------------------------------------
 
 ## OtherPelagics
@@ -181,8 +178,8 @@ MAB.rpath.params$model$Biomass[27]<-NA
 MAB.rpath.params$model$EE[27]<-0.85
 
 ## SpinyDogfish
-## Decrease biomass by 0.8x (Lucey, Buccheister et al.)
-MAB.rpath.params$model$Biomass[43]<-MAB.rpath.params$model$Biomass[43]*.8
+## Decrease biomass by 0.7x (Lucey, Buccheister et al.)
+MAB.rpath.params$model$Biomass[43]<-MAB.rpath.params$model$Biomass[43]*0.7
 
 ## OtherDemersals
 ## Increase biomass by 200x
@@ -705,12 +702,8 @@ check.rpath.params(MAB.rpath.params)
 
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 check.ee(MAB.rpath)
-MAB.rpath
-#source("MAB_prebal.R")
-EE<-MAB.rpath$EE
-EE[order(EE)]
 
-
+webplot(MAB.rpath,labels = T)
 #Save files
 save(MAB.rpath, file = "outputs/MAB_Rpath_no_disc.RData")
 save(MAB.rpath.params,file = "outputs/MAB_params_Rpath_no_disc.RData")
