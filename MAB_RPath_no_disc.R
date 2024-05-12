@@ -329,7 +329,7 @@ MAB.rpath.params$model[Group == "GelZooplankton",PB := 35]
 
 ## Megabenthos
 ## Decrease PB by 2x (Lucey, Link et al.)
-MAB.rpath.params$model[Group=="Megabenthos",PB := PB/2]
+MAB.rpath.params$model[Group=="Megabenthos",PB := 2.5]
 
 
 ## SilverHake
