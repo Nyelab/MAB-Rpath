@@ -223,12 +223,8 @@ MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*16
 MAB.rpath.params$model$Biomass[13]<-MAB.rpath.params$model$Biomass[13]*2
 
 ## SummerFlounder
-## Increase biomass by 5x (Lucey, Buccheister et al.)
-MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*5
-
-## HMS
-## Decrease biomass by 0.75x
-MAB.rpath.params$model$Biomass[15]<-MAB.rpath.params$model$Biomass[15]*.75
+## Increase biomass by 2.75x (In line with assessment value)
+MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*2.75
 
 ## OceanPout
 ## Increase biomass by 5x 
@@ -264,9 +260,9 @@ MAB.rpath.params$model$Biomass[47]<-MAB.rpath.params$model$Biomass[47]*2
 ## Mesopelagics
 ## Increase biomass by 2.5x (Prebal diagnostics)
 #MAB.rpath.params$model$Biomass[22]<-MAB.rpath.params$model$Biomass[22]*2.5
-#OR set EE to 0.85 like Sean
+#OR set EE to 0.95
 MAB.rpath.params$model$Biomass[22]<-NA
-MAB.rpath.params$model$EE[22]<-0.85
+MAB.rpath.params$model$EE[22]<-0.95
 
 ## AtlScallop
 ## Increase biomass by 3.5x (Lucey)
@@ -378,12 +374,12 @@ MAB.rpath.params$model[Group=="Macrobenthos", PB := 2.5]
 MAB.rpath.params$model[Group=="HMS", QB :=QB/3]
 
 ## Seabirds
-## Decrease QB by 2x
-MAB.rpath.params$model[Group == "SeaBirds", QB:= QB/2]
+## Set to 76.2 based on Heymans (2001)
+MAB.rpath.params$model[Group == "SeaBirds", QB:= 76.2]
 
 ## Odontocetes
-## Decrease QB by 2x (Lucey)
-MAB.rpath.params$model[Group=="Odontocetes",QB := QB/2]
+## Decrease QB
+MAB.rpath.params$model[Group=="Odontocetes",QB := QB*0.65]
 
 ## RedHake
 ## Decrease QB by 4x (Lucey)
@@ -436,7 +432,7 @@ MAB.rpath.params$model$Trap[28]<-MAB.rpath.params$model$Trap[28]*.01
 
 # ## Mesopelagics
 # ## Reduce trap fishing
-MAB.rpath.params$model$Trap[22]<-MAB.rpath.params$model$Trap[22]*.01
+MAB.rpath.params$model$Trap[22]<-MAB.rpath.params$model$Trap[22]*0
 
 ## OceanPout
 ## Reduce trap fishing
@@ -593,11 +589,6 @@ MAB.rpath.params$diet[20,15]<-MAB.rpath.params$diet[20,15]+0.07
 MAB.rpath.params$diet[37,44]<-MAB.rpath.params$diet[37,44]-0.015
 MAB.rpath.params$diet[20,44]<-MAB.rpath.params$diet[20,44]+0.015
 
-## Relieve predation pressure on WinterSkate
-## Macrobenthos: WinterSkate -0.003%, Macrobenthos +0.003%
-# MAB.rpath.params$diet[48,21]<-MAB.rpath.params$diet[48,21]+0.000037
-# MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]-0.000037
-
 ## Relieve predation pressure on RedHake
 ## Macrobenthos: RedHake -0.004%, Macrobenthos +0.004%
 MAB.rpath.params$diet[33,21]<-MAB.rpath.params$diet[33,21]-0.000042
@@ -688,13 +679,28 @@ MAB.rpath.params$diet[Group=="OtherSkates",Macrobenthos := Macrobenthos-0.00004]
 MAB.rpath.params$diet[Group=="Megabenthos",Macrobenthos := Macrobenthos+0.00004]
 
 #Relieve predation on OceanPout
-#Bluefish: OceanPout - 2.5%, AtlMenhaden +2.5%
+#Bluefish: OceanPout -2.5%, AtlMenhaden +2.5%
 MAB.rpath.params$diet[Group=="OceanPout",Bluefish := Bluefish - 0.025]
 MAB.rpath.params$diet[Group=="AtlMenhaden",Bluefish := Bluefish + 0.025]
 
-#SpinyDogfish: OceanPout - 0.4%, SmPelagics +0.4%
+#SpinyDogfish: OceanPout -0.4%, SmPelagics +0.4%
 MAB.rpath.params$diet[Group=="OceanPout",SpinyDogfish := SpinyDogfish - 0.004]
 MAB.rpath.params$diet[Group=="SmPelagics",SpinyDogfish := SpinyDogfish + 0.004]
+
+## Relieve predation pressure on Mesopelagics
+# SW added
+#Illex: Mesopelagics -0.9%, Butterfish +0.9%
+MAB.rpath.params$diet[Group=="Mesopelagics", Illex := Illex - 0.009]
+MAB.rpath.params$diet[Group=="Butterfish",Illex := Illex + 0.009]
+
+#Loligo: Mesopelagics -0.9%, Butterfish +0.9%
+MAB.rpath.params$diet[Group=="Mesopelagics", Loligo := Loligo - 0.009]
+MAB.rpath.params$diet[Group=="Butterfish",Loligo := Loligo + 0.009]
+
+#OtherCephalopods: Mesopelagics -0.9%, Butterfish +0.9%
+MAB.rpath.params$diet[Group=="Mesopelagics", OtherCephalopods := OtherCephalopods - 0.009]
+MAB.rpath.params$diet[Group=="Butterfish",OtherCephalopods := OtherCephalopods + 0.009]
+
 # Check for balance -------------------------------------------------------
 
 #Load Sean's prebal functions
