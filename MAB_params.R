@@ -22,7 +22,7 @@ source(here('MAB_basic_inputs.R'))
 params<-MAB.Params[,c("RPATH","PB","QB","BA")]
 
 ##Manually add parameter values for krill, menhaden
-krill_men<-cbind(c("Krill","AtlMenhaden"),c(14.25,1.45),c(141.8938065,3.804),c(0,0))
+krill_men<-cbind(c("Krill","AtlMenhaden"),c(14.25,1.45),c(36.5,3.804),c(0,0))
 colnames(krill_men)<-c("RPATH","PB","QB","BA")
 params<-rbind(params,krill_men)
 params <- params %>% mutate(PB=as.numeric(PB),QB=as.numeric(QB),BA=as.numeric(BA),RPATH = as.character(RPATH))

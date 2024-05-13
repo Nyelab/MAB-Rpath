@@ -406,6 +406,7 @@ MAB.rpath.params$model[Group=="Goosefish",QB:=1.22]
 MAB.rpath.params$model[Group=="RedHake",QB:=0.94]
 MAB.rpath.params$model[Group=="OtherPelagics",QB:=2]
 MAB.rpath.params$model[Group=="OtherSkates",QB:=1.1]
+MAB.rpath.params$model[Group=="Cod",QB:=1.2]
 
 #MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 ##GE
