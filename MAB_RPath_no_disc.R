@@ -365,7 +365,6 @@ MAB.rpath.params$model[Group=="SmFlatfishes",PB := 1.64]
 MAB.rpath.params$model[Group=="Sharks",PB := 0.16]
 MAB.rpath.params$model[Group=="LittleSkate",PB := 0.5]
 MAB.rpath.params$model[Group=="RedHake",PB := 0.45]
-MAB.rpath.params$model[Group=="Mesopelagics",PB := 1.65]
 
 #Changes below are to make invert groups more realistic
 MAB.rpath.params$model[Group=="OtherShrimps", PB := 2]
