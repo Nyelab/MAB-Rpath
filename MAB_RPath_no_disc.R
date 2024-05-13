@@ -365,6 +365,7 @@ MAB.rpath.params$model[Group=="SmFlatfishes",PB := 1.64]
 MAB.rpath.params$model[Group=="Sharks",PB := 0.16]
 MAB.rpath.params$model[Group=="LittleSkate",PB := 0.5]
 MAB.rpath.params$model[Group=="RedHake",PB := 0.45]
+MAB.rpath.params$model[Group=="Mesopelagics",PB := 1.65]
 
 #Changes below are to make invert groups more realistic
 MAB.rpath.params$model[Group=="OtherShrimps", PB := 2]
@@ -407,6 +408,9 @@ MAB.rpath.params$model[Group=="RedHake",QB:=0.94]
 MAB.rpath.params$model[Group=="OtherPelagics",QB:=2]
 MAB.rpath.params$model[Group=="OtherSkates",QB:=1.1]
 MAB.rpath.params$model[Group=="Cod",QB:=1.2]
+
+#Adjusting Micronekton QB - not sure why it was so high in EMAX
+MAB.rpath.params$model[Group=="Micronekton",QB:=QB/2]
 
 #MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 ##GE
