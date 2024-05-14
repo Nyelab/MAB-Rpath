@@ -243,7 +243,7 @@ MAB.rpath.params$model$Biomass[46]<-MAB.rpath.params$model$Biomass[46]*3
 #MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*18
 #OR set EE to 0.85 like Sean
 MAB.rpath.params$model$Biomass[41]<-NA
-MAB.rpath.params$model$EE[41]<-0.85
+MAB.rpath.params$model$EE[41]<-0.9
 
 ## LittleSkate
 ## Increase biomass by 2x (Lucey)
@@ -591,12 +591,12 @@ MAB.rpath.params$diet[20,44]<-MAB.rpath.params$diet[20,44]+0.015
 
 ## Relieve predation pressure on RedHake
 ## Macrobenthos: RedHake -0.004%, Macrobenthos +0.004%
-MAB.rpath.params$diet[33,21]<-MAB.rpath.params$diet[33,21]-0.000042
-MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]+0.000042
+# MAB.rpath.params$diet[33,21]<-MAB.rpath.params$diet[33,21]-0.000042
+# MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]+0.000042
 
-## OtherDemersals: RedHake -1.5%, Macrobenthos +1.5%
-MAB.rpath.params$diet[33,29]<-MAB.rpath.params$diet[33,29]-0.015
-MAB.rpath.params$diet[20,29]<-MAB.rpath.params$diet[20,29]+0.015
+# ## OtherDemersals: RedHake -.5%, Macrobenthos +.5%
+MAB.rpath.params$diet[33,29]<-MAB.rpath.params$diet[33,29]-0.005
+MAB.rpath.params$diet[20,29]<-MAB.rpath.params$diet[20,29]+0.005
 
 ## Relieve predation pressure on SmPelagics
 ## SpinyDogfish: SmPelagics -10%, Macrobenthos +10%
@@ -646,29 +646,6 @@ MAB.rpath.params$diet[20,20]<-MAB.rpath.params$diet[20,20]+0.015
 ## SouthernDemersals: Weakfish -4%, Macrobenthos +4%
 MAB.rpath.params$diet[45,43]<-MAB.rpath.params$diet[45,43]-0.04
 MAB.rpath.params$diet[20,43]<-MAB.rpath.params$diet[20,43]+0.04
-
-## Adjust predation on AtlMenhaden 
-## Want to better reflect relative biomass of AtlMenhaden, SmPelagics
-## SW added
-#HMS: AtlMenhaden -50%, SmPelagics +50%
-MAB.rpath.params$diet[Group=="AtlMenhaden",HMS := HMS - 0.5]
-MAB.rpath.params$diet[Group=="SmPelagics",HMS := HMS + 0.5]
-
-#SeaBirds: AtlMenhaden -14%, SmPelagics +14%
-MAB.rpath.params$diet[Group=="AtlMenhaden",SeaBirds := SeaBirds - 0.14]
-MAB.rpath.params$diet[Group=="SmPelagics",SeaBirds := SeaBirds + 0.14]
-
-#BaleenWhales: AtlMenhaden -6%, SmPelagics +6%
-MAB.rpath.params$diet[Group=="AtlMenhaden",BaleenWhales := BaleenWhales - 0.06]
-MAB.rpath.params$diet[Group=="SmPelagics",BaleenWhales := BaleenWhales + 0.06]
-
-#OtherPelagics: AtlMenhaden -40%, SmPelagics +40%
-MAB.rpath.params$diet[Group=="AtlMenhaden",OtherPelagics := OtherPelagics - 0.4]
-MAB.rpath.params$diet[Group=="SmPelagics",OtherPelagics := OtherPelagics + 0.4]
-
-#Odontocetes: AtlMenhaden -10%, SmPelagics +10%
-MAB.rpath.params$diet[Group=="AtlMenhaden",Odontocetes := Odontocetes - 0.1]
-MAB.rpath.params$diet[Group=="SmPelagics",Odontocetes := Odontocetes + 0.1]
 
 #Relieve predation on OtherSkates
 #Goosefish: OtherSkates -3%, LittleSkate +3%

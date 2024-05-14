@@ -128,12 +128,14 @@ MAB.rpath.params$diet[38,2]<-MAB.rpath.params$diet[38,2]+0.005
 
 #Shift AtlMackerel[4] predation
 #Remove 5% from Macrobenthos[20]
-#Remove 15% from Micronekton[23]
+#Remove 8% from Micronekton[23]
+#Remove 7% from Krill
 #Remove 10% from SmPelagics[41]
 #Remove 30% from LgCopepods[17]
 #Move 60% to SmCopepods[38]
 MAB.rpath.params$diet[20,5]<-MAB.rpath.params$diet[20,5]-0.05
-MAB.rpath.params$diet[23,5]<-MAB.rpath.params$diet[23,5]-0.15
+MAB.rpath.params$diet[23,5]<-MAB.rpath.params$diet[23,5]-0.08
+MAB.rpath.params$diet[50,5]<-MAB.rpath.params$diet[50,5]-0.07
 MAB.rpath.params$diet[41,5]<-MAB.rpath.params$diet[41,5]-0.1
 MAB.rpath.params$diet[17,5]<-MAB.rpath.params$diet[17,5]-0.3
 MAB.rpath.params$diet[38,5]<-MAB.rpath.params$diet[38,5]+0.6
