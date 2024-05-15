@@ -309,7 +309,7 @@ MAB.rpath.params$model[Group=="LgCopepods",Biomass := Biomass*1.3]
 MAB.rpath.params$model[Group=="Micronekton",Biomass := Biomass*1.2]
 
 #Increase YTFlounder biomass 
-MAB.rpath.params$model[Group=="YTFlounder",Biomass := Biomass*2]
+MAB.rpath.params$model[Group=="YTFlounder",Biomass := Biomass*1.75]
 
 # PB changes --------------------------------------------------------------
 ## Bluefish
@@ -353,7 +353,7 @@ MAB.rpath.params$model[Group=="Cod", PB:= 0.4]
 MAB.rpath.params$model[Group=="OtherSkates", PB := 0.55]
 MAB.rpath.params$model[Group=="BlackSeaBass", PB := 0.5]
 MAB.rpath.params$model[Group=="OceanPout", PB := 0.57]
-MAB.rpath.params$model[Group=="YTFlounder", PB := 0.6]
+MAB.rpath.params$model[Group=="YTFlounder", PB := 0.9]
 MAB.rpath.params$model[Group=="SummerFlounder", PB := 0.7]
 MAB.rpath.params$model[Group=="OtherDemersals", PB := 0.65]
 MAB.rpath.params$model[Group=="SouthernDemersals", PB := 1.14]
@@ -362,12 +362,16 @@ MAB.rpath.params$model[Group=="Sharks",PB := 0.16]
 MAB.rpath.params$model[Group=="LittleSkate",PB := 0.5]
 MAB.rpath.params$model[Group=="RedHake",PB := 0.45]
 
+#Adjust RiverHerring based on Dias et al 2019
+MAB.rpath.params$model[Group=="RiverHerring",PB := 1.3]
+
 #Changes below are to make invert groups more realistic
 MAB.rpath.params$model[Group=="OtherShrimps", PB := 2]
 MAB.rpath.params$model[Group=="Illex", PB := 3]
 MAB.rpath.params$model[Group=="Loligo", PB := 3]
 MAB.rpath.params$model[Group=="OtherCephalopods", PB := 3]
 MAB.rpath.params$model[Group=="Macrobenthos", PB := 2.5]
+MAB.rpath.params$model[Group=="AmLobster", PB := 1.5]
 # QB changes --------------------------------------------------------------
 ## HMS
 ## Decrease QB by 3x
@@ -403,6 +407,7 @@ MAB.rpath.params$model[Group=="RedHake",QB:=0.94]
 MAB.rpath.params$model[Group=="OtherPelagics",QB:=2]
 MAB.rpath.params$model[Group=="OtherSkates",QB:=1.1]
 MAB.rpath.params$model[Group=="Cod",QB:=1.2]
+MAB.rpath.params$model[Group=="RiverHerring",QB:=9.4]
 
 #Adjusting Micronekton QB - not sure why it was so high in EMAX
 MAB.rpath.params$model[Group=="Micronekton",QB:=QB/2]
@@ -471,7 +476,7 @@ MAB.rpath.params$diet[19,34]<-MAB.rpath.params$diet[19,34]+0.04
 MAB.rpath.params$diet[Group=="OtherCephalopods",Goosefish := Goosefish - 0.04]
 MAB.rpath.params$diet[Group=="Loligo",Goosefish := Goosefish + 0.04]
 
-## Scip: OtherCephalopods -0.5%, Loligo +0.5%
+## Scup: OtherCephalopods -0.5%, Loligo +0.5%
 MAB.rpath.params$diet[Group=="OtherCephalopods",Scup := Scup - 0.005]
 MAB.rpath.params$diet[Group=="Loligo",Scup := Scup + 0.005]
 
@@ -590,9 +595,6 @@ MAB.rpath.params$diet[37,44]<-MAB.rpath.params$diet[37,44]-0.015
 MAB.rpath.params$diet[20,44]<-MAB.rpath.params$diet[20,44]+0.015
 
 ## Relieve predation pressure on RedHake
-## Macrobenthos: RedHake -0.004%, Macrobenthos +0.004%
-# MAB.rpath.params$diet[33,21]<-MAB.rpath.params$diet[33,21]-0.000042
-# MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]+0.000042
 
 # ## OtherDemersals: RedHake -.5%, Macrobenthos +.5%
 MAB.rpath.params$diet[33,29]<-MAB.rpath.params$diet[33,29]-0.005
