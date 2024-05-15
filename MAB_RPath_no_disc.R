@@ -681,11 +681,11 @@ MAB.rpath.params$diet[Group=="Mesopelagics", OtherCephalopods := OtherCephalopod
 MAB.rpath.params$diet[Group=="Butterfish",OtherCephalopods := OtherCephalopods + 0.009]
 
 # Check for balance -------------------------------------------------------
+#add data pedigree
+source("Sarah_R/data_pedigree.R")
 
 #Load Sean's prebal functions
 source(url("https://github.com/NOAA-EDAB/GBRpath/blob/master/R/PreBal.R?raw=true"))
-#add data pedigree
-#source("Sarah_R/data_pedigree.R")
 
 check.rpath.params(MAB.rpath.params)
 
