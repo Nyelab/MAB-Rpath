@@ -10,7 +10,8 @@
 ## Email: sarah.j.weisberg@stonybrook.edu
 #
 
-# Wed Apr 17 10:59:06 2024 ------------------------------
+# Thu May 16 10:02:08 2024 ------------------------------
+
 
 ## Load libraries, packages and functions
 remotes::install_github('NOAA-EDAB/Rpath')
@@ -361,6 +362,7 @@ MAB.rpath.params$model[Group=="SmFlatfishes",PB := 1.64]
 MAB.rpath.params$model[Group=="Sharks",PB := 0.16]
 MAB.rpath.params$model[Group=="LittleSkate",PB := 0.5]
 MAB.rpath.params$model[Group=="RedHake",PB := 0.45]
+MAB.rpath.params$model[Group=="OtherPelagics",PB:=1.2]
 
 #Adjust RiverHerring based on Dias et al 2019
 MAB.rpath.params$model[Group=="RiverHerring",PB := 1.3]
@@ -404,13 +406,16 @@ MAB.rpath.params$model[Group=="LittleSkate",QB:=1.4]
 MAB.rpath.params$model[Group=="Bluefish",QB:=3.5]
 MAB.rpath.params$model[Group=="Goosefish",QB:=1.22]
 MAB.rpath.params$model[Group=="RedHake",QB:=0.94]
-MAB.rpath.params$model[Group=="OtherPelagics",QB:=2]
+MAB.rpath.params$model[Group=="OtherPelagics",QB:=4]
 MAB.rpath.params$model[Group=="OtherSkates",QB:=1.1]
 MAB.rpath.params$model[Group=="Cod",QB:=1.2]
 MAB.rpath.params$model[Group=="RiverHerring",QB:=9.4]
 
 #Adjusting Micronekton QB - not sure why it was so high in EMAX
 MAB.rpath.params$model[Group=="Micronekton",QB:=QB/2]
+
+#Adjusting LgCopepods QB to be a bit higher in MAB relative to other regions
+MAB.rpath.params$model[Group=="LgCopepods",QB:=148]
 
 #MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 ##GE
@@ -692,7 +697,7 @@ check.rpath.params(MAB.rpath.params)
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 check.ee(MAB.rpath)
 
-webplot(MAB.rpath,labels = T)
+#webplot(MAB.rpath,labels = T)
 #Save files
 save(MAB.rpath, file = "outputs/MAB_Rpath_no_disc.RData")
 save(MAB.rpath.params,file = "outputs/MAB_params_Rpath_no_disc.RData")

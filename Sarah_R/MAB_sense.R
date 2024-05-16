@@ -42,7 +42,7 @@ fixers<-which((1-Unassim)*QB*(1-MAB.rpath.params$pedigree[,QB]) < (1+MAB.rpath.p
 #exclude Phytoplankton & Detritus
 fixers <- fixers[!fixers %in% c(pp,(nliving+ndead))]
 
-#adjust QB and PB values where needed
+#adjust QB and PB pedigree values where needed
 for (i in 1:length(fixers)){
   to_fix<-fixers[i]
   Resp_edge<-PB[to_fix]/((1-Unassim[to_fix])*QB[to_fix])
@@ -64,32 +64,32 @@ for (i in 1:length(fixers)){
 
 
 #Fix PB/QB pedigree values so that GE cannot >1
-GE<-MAB.rpath$GE
-limits<-(1-MAB.rpath.params$pedigree[,QB])/(1+MAB.rpath.params$pedigree[, PB])
-#Identify which groups violate this rule
-fixers<-which(limits<GE[1:length(limits)])
-#exclude Phytoplankton (19)
-fixers <- fixers[-19]
-
-#adjust QB and PB values where needed
-for (i in 1:length(fixers)){
-  to_fix<-fixers[i]
-  GE_group<-GE[to_fix]
-  QB_ped<-MAB.rpath.params$pedigree[to_fix,QB]
-  PB_ped<-MAB.rpath.params$pedigree[to_fix,PB]
-  limit<-(1-QB_ped)/(1+PB_ped)
-  while(GE_group>limit){
-    if(QB_ped >= PB_ped){
-      QB_ped <- QB_ped - 0.1
-    }
-    else{
-      PB_ped <- PB_ped - 0.1
-    }
-    limit<-(1-QB_ped)/(1+PB_ped)
-  }
-  MAB.rpath.params$pedigree[to_fix,PB := PB_ped]
-  MAB.rpath.params$pedigree[to_fix,QB := QB_ped]
-}
+# GE<-MAB.rpath$GE
+# limits<-(1-MAB.rpath.params$pedigree[,QB])/(1+MAB.rpath.params$pedigree[, PB])
+# #Identify which groups violate this rule
+# fixers<-which(limits<GE[1:length(limits)])
+# #exclude Phytoplankton (19)
+# fixers <- fixers[-19]
+# 
+# #adjust QB and PB values where needed
+# for (i in 1:length(fixers)){
+#   to_fix<-fixers[i]
+#   GE_group<-GE[to_fix]
+#   QB_ped<-MAB.rpath.params$pedigree[to_fix,QB]
+#   PB_ped<-MAB.rpath.params$pedigree[to_fix,PB]
+#   limit<-(1-QB_ped)/(1+PB_ped)
+#   while(GE_group>limit){
+#     if(QB_ped >= PB_ped){
+#       QB_ped <- QB_ped - 0.1
+#     }
+#     else{
+#       PB_ped <- PB_ped - 0.1
+#     }
+#     limit<-(1-QB_ped)/(1+PB_ped)
+#   }
+#   MAB.rpath.params$pedigree[to_fix,PB := PB_ped]
+#   MAB.rpath.params$pedigree[to_fix,QB := QB_ped]
+# }
 
 
 #Set up sense runs
@@ -99,11 +99,11 @@ orig.biomass<-scene$start_state$Biomass
 
 # ----- Set up ecosense generator ----- #######################################
 scene$params$BURN_YEARS <- 50
-NUM_RUNS <- 2000
+NUM_RUNS <- 525
 parlist <- as.list(rep(NA, NUM_RUNS))
 kept <- rep(NA, NUM_RUNS)
 
-fail_groups<-c()
+#fail_groups<-c()
 set.seed(19)
 for (irun in 1:NUM_RUNS){
   MABsense <- copy(scene)
@@ -117,10 +117,10 @@ for (irun in 1:NUM_RUNS){
   # failList <- which((is.na(MABtest$end_state$Biomass) | MABtest$end_state$Biomass/orig.biomass > 1000 | MABtest$end_state$Biomass/orig.biomass < 1/1000))
   # {if (length(failList)>0)
   # {cat(irun,": fail in year ",MABtest$crash_year,": ",failList,"\n"); kept[irun] <- F; flush.console()}
-  #   else 
+  #   else
   #   {cat(irun,": success!\n"); kept[irun]<-T;  flush.console()}}
   # failList<-as.data.frame(failList)
-  # fail_groups<-rbind(fail_groups,failList)
+  # # fail_groups<-rbind(fail_groups,failList)
   parlist[[irun]]$BURN_YEARS <- 1
 }
        
@@ -130,6 +130,8 @@ nkept <- length(KEPT)
 nkept
 MAB_sense <- parlist[KEPT]
 
+MAB_sense_unbound <- parlist
+
 fail_groups <- fail_groups %>% group_by(failList) %>% tally()
 colnames(fail_groups)<-c("group_num","total")
 groups_num<- as.data.frame(cbind(groups[1:nliving],seq(2,(nliving+1))))
@@ -137,7 +139,8 @@ colnames(groups_num) <-c("name","group_num")
 groups_num$group_num<-as.numeric(groups_num$group_num)
 fail_groups<-left_join(fail_groups,groups_num,by="group_num")
 
-save(MAB_sense, file = "outputs/MAB_sense_1k_2024.RData")
+save(MAB_sense, file = "outputs/MAB_sense_Rpath_50k_2024.RData")
+save(MAB_sense_unbound, file = "outputs/MAB_sense_unbound.RData")
 # ----- Examine results relative to starting model ----- #######################################
 biomass_sense<-c()
 #biomass distributions
