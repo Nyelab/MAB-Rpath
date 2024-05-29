@@ -48,7 +48,7 @@ source(here('MAB_basic_inputs.R'))
 ## Aggregate low biomass species
 spp <- spp[!duplicated(spp$SVSPP),]
 spp <- spp[RPATH == 'AtlHerring', RPATH := 'SmPelagics']
-spp <- spp[RPATH == 'Clams', RPATH := 'Megabenthos']
+# spp <- spp[RPATH == 'Clams', RPATH := 'Megabenthos']
 spp <- spp[RPATH == 'Haddock', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'LargePelagics', RPATH := 'OtherPelagics']
 spp <- spp[RPATH == 'OffHake', RPATH := 'OtherDemersals']
