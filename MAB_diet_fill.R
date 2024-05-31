@@ -4,9 +4,7 @@
 ## Purpose of script: Reformat existing diet matrix for use in RPath.
 ##                    
 ##
-## Author: Brandon Beltz
-##
-## Last updated: 02 Sep 2021
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
 ## Email: brandon.beltz@stonybrook.edu
 ## ---------------------------
@@ -14,9 +12,8 @@
 ## Notes: Modified from Sarah Weisberg's GOM RPath model
 ##
 ## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 17:06:25 2023 ------------------------------
 
 ## Load libraries, packages and functions
 library(readr);library(here)

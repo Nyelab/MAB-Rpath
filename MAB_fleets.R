@@ -4,26 +4,20 @@
 ## Purpose of script: Create a data table of groups and fleets for use in the
 ##                    final MAB Rpath model.
 ##                    
-## Author: Brandon Beltz
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
-## Date Created: 26 Aug 2021
 ##
 ## Email: brandon.beltz@stonybrook.edu
-## ---------------------------
-##
-## Notes:
-##
-## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Tue Apr 16 12:05:00 2024 ------------------------------
+
 
 ## Load libraries, packages and functions
 library(data.table)
 
 ## Load commercial landings from Sean and MAB basic inputs
 load("data/mean_landings_mab_80_85.RData")
-source("MAB_basic_inputs.R")
+source(here("MAB_basic_inputs.R"))
 
 ## Rename HMS to HMS Fleet
 mean.land[FLEET == "HMS",FLEET := "HMS Fleet"]
@@ -37,7 +31,7 @@ groups_fleets<-rbind(MAB.groups,dis_det_cols)
 MAB.fleets<-as.data.table(unique(mean.land$FLEET))
 colnames(MAB.fleets)<-"RPATH"
 
-## Bind fleets and model functional groups
-rec<-data.frame("Recreational")
-names(rec)<-c("RPATH")
-groups_fleets<-rbind(groups_fleets,MAB.fleets,rec)
+## Add rec & purse seine fleets
+rec_men<-data.frame(rbind("Recreational","PurseSeine"))
+names(rec_men)<-c("RPATH")
+groups_fleets<-rbind(groups_fleets,MAB.fleets,rec_men)

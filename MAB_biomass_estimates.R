@@ -15,26 +15,35 @@
 ## Notes: This version is specific to the MABRpath model.
 ##
 ## ---------------------------
-## Set working directory
-
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
 
 ## Load libraries, packages and functions
 
-library(data.table); library(rgdal); library(Survdat); library(here)
+library(data.table)
+library(here)
+remotes::install_github('NOAA-EDAB/survdat')
+library(survdat)
+library(lwgeom)
 '%notin%' <-Negate('%in%')
 
 ## Load Survdat, species list and strata
-load("data/Survdat.RData")
-load("data/Species_codes.RData")
-strata<-readOGR('data/strata','strata')
+load(here("data/Survdat.RData"))
+load(here("data/Species_codes.RData"))
 
-## Generate area table
-strat.area<-getarea(strata, 'STRATA')
-setnames(strat.area,'STRATA','STRATUM')
+#Calculate total MAB area
+area<-sf::st_read(dsn=system.file("extdata","strata.shp",package="survdat"))
+area<-get_area(areaPolygon = area, areaDescription="STRATA")
+MAB.area<-subset(area, area$STRATUM %in% MAB.strata)
+MAB.area<-sum(MAB.area$Area)
+rm(area)
+
+# strata<-readOGR('data/strata','strata')
+# 
+# ## Generate area table
+# strat.area<-getarea(strata, 'STRATA')
+# setnames(strat.area,'STRATA','STRATUM')
 
 ## Load basic inputs
-source('MAB_basic_inputs.R')
+source(here('MAB_basic_inputs.R'))
 
 ## Aggregate low biomass species
 spp <- spp[!duplicated(spp$SVSPP),]
@@ -47,43 +56,54 @@ spp <- spp[RPATH == 'OtherFlatfish', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Pollock', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'Rays', RPATH := 'OtherSkates']
 spp <- spp[RPATH == 'RedCrab', RPATH := 'Megabenthos']
-spp <- spp[RPATH == 'RiverHerring', RPATH := 'SmPelagics']
+spp <- spp[RPATH == 'AmShad', RPATH := 'RiverHerring']
 spp <- spp[RPATH == 'Tilefish', RPATH := 'SouthernDemersals']
 spp <- spp[RPATH == 'WitchFlounder', RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'WhiteHake', RPATH := 'OtherDemersals']
+#spp <- spp[SCINAME == 'BREVOORTIA', RPATH := 'AtlMenhaden']
 
-## Subset by Fall and MAB strata
-MAB.fall<-survdat[SEASON == 'FALL' & STRATUM %in% MAB.strata,]
+#Calculate swept area biomass
+#Fall season only
+swept<-calc_swept_area(surveyData=survdat, areaPolygon = 'NEFSC strata', areaDescription = 'STRATA', 
+                       filterByArea = MAB.strata, filterBySeason= "FALL", 
+                       groupDescription = "SVSPP", filterByGroup = "all", mergesexFlag = T,tidy = F, q = NULL, a = 0.0384)
 
-## Run stratification prep
-MAB.prep<-stratprep(MAB.fall,strat.area,strat.col = 'STRATUM',area.col = 'Area')
+# ## Subset by Fall and MAB strata
+# MAB.fall<-survdat[SEASON == 'FALL' & STRATUM %in% MAB.strata,]
+# 
+# ## Run stratification prep
+# MAB.prep<-stratprep(MAB.fall,strat.area,strat.col = 'STRATUM',area.col = 'Area')
 
 ## Merge with RPATH names
 spp <- spp[!duplicated(spp$SVSPP),]
 
 ## Calculate stratified means
-mean.biomass<-stratmean(MAB.prep,group.col = 'SVSPP',strat.col = 'STRATUM')
+#mean.biomass<-stratmean(MAB.prep,group.col = 'SVSPP',strat.col = 'STRATUM')
 
 ## Merge with RPATH names
-mean.biomass<-merge(mean.biomass,spp[,list(SVSPP,RPATH,SCINAME,Fall.q)], by = 'SVSPP')
+#mean.biomass<-merge(swept,spp[,list(SVSPP,RPATH,SCINAME,Fall.q)], by = 'SVSPP')
 
 ## Calculate total biomass from swept area
-total.biomass<-sweptarea(MAB.prep, mean.biomass, strat.col = 'STRATUM', area.col = 'Area')
+#total.biomass<-sweptarea(MAB.prep, mean.biomass, strat.col = 'STRATUM', area.col = 'Area')
 
 ## Merge with RPATH names
-total.biomass<-merge(total.biomass,spp[,list(SVSPP,RPATH,SCINAME,Fall.q)], by = 'SVSPP')
+total.biomass<-merge(swept,spp[,list(SVSPP,RPATH,SCINAME,Fall.q)], by = 'SVSPP')
 
 ## Calculate total area
-MAB.strat.area<-strat.area[STRATUM %in% MAB.strata,sum(Area)]
+#MAB.strat.area<-strat.area[STRATUM %in% MAB.strata,sum(Area)]
 
 ## Convert to b/a in mt/km^2
-total.biomass <- total.biomass[, biomass.t_area :=(tot.biomass*.001)/(Fall.q*MAB.strat.area)]
+total.biomass <- total.biomass[, biomass.t_area :=(tot.biomass*.001)/(Fall.q*MAB.area)]
 
-#Average for 1980-85
-MAB.biomass.80s <- total.biomass[YEAR %in% 1980:1985, mean(biomass.t_area), by = RPATH]
-setnames(MAB.biomass.80s,'V1','Biomass')
+#Sum by RPATH names
+#SW added
+setkey(total.biomass,RPATH,YEAR)
+summary.biomass <- total.biomass[, sum(biomass.t_area), by = key(total.biomass)]
+setnames(summary.biomass, 'V1','Biomass')
+MAB.biomass.80s<-summary.biomass[YEAR %in% 1980:1985, mean(Biomass), by=RPATH]
+setnames(MAB.biomass.80s, 'V1','Biomass')
 
-##Output to .csv
+##Save output
 save(MAB.biomass.80s, file = 'data/MAB_biomass_fall_80s.RData')
 
 ## Add EMAX groups
@@ -107,7 +127,7 @@ MAB.EMAX<-MAB.EMAX[RPATH %like% 'Macro', RPATH:='Macrobenthos',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Baleen', RPATH := 'BaleenWhales',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Gel',RPATH := 'GelZooplankton',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Phyto', RPATH :='Phytoplankton',]
-MAB.EMAX<-MAB.EMAX[RPATH %like% 'Megabenthos',RPATH := 'Mega',]
+MAB.EMAX<-MAB.EMAX[RPATH %like% 'Megabenthos',RPATH := 'Megabenthos',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Pelagics',RPATH := 'Pelagics',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Demersals',RPATH := 'Demersals',]
 MAB.EMAX<-MAB.EMAX[RPATH %like% 'Sharks', RPATH :='Sharks']
@@ -120,8 +140,19 @@ MAB.EMAX<-MAB.EMAX[RPATH == 'Sharks', Biomass:=SharksBiomass,]
 BenthosBiomass<-MAB.EMAX[RPATH == 'Macrobenthos', sum(Biomass),]
 MAB.EMAX<-MAB.EMAX[RPATH == 'Macrobenthos', Biomass:=BenthosBiomass,]
 
+## Aggregate EMAX megabenthos
+MegaBiomass<-MAB.EMAX[RPATH == 'Megabenthos', sum(Biomass),]
+MAB.EMAX<-MAB.EMAX[RPATH == 'Megabenthos', Biomass:=MegaBiomass,]
+
+##Assign a portion of micronekton biomass to krill
+#SW added
+krill_prop<-0.15
+KrillBiomass<-MAB.EMAX[RPATH == 'Micronekton', Biomass]*krill_prop
+MAB.EMAX<-MAB.EMAX[RPATH == 'Micronekton', Biomass := Biomass*(1-krill_prop)]
+MAB.EMAX<-rbind(MAB.EMAX,list("Krill",KrillBiomass))
+
 ## Remove unused groups
-MAB.EMAX<-MAB.EMAX[RPATH %notin% c('Larval-juv fish- all','Shrimp et al.','Mega','Pelagics','Demersals','Discard','Detritus-POC','Fishery'),]
+MAB.EMAX<-MAB.EMAX[RPATH %notin% c('Larval-juv fish- all','Shrimp et al.','Pelagics','Demersals','Discard','Detritus-POC','Fishery'),]
 MAB.EMAX<-unique(MAB.EMAX)
 
 ## Combine survey and EMAX biomass estimates
@@ -130,5 +161,10 @@ MAB.biomass.80s<-MAB.biomass.80s[is.na(Biomass.y) , Biomass.y := Biomass.x]
 MAB.biomass.80s<-MAB.biomass.80s[,Biomass.x :=NULL]
 setnames(MAB.biomass.80s,"Biomass.y","Biomass")
 
+##Manually add menhaden biomass - based on Chagaris et al. (2020)
+##Assuming 10% of menhaden biomass is in relevant MAB area
+MAB.biomass.80s<-MAB.biomass.80s[RPATH == "AtlMenhaden", Biomass :=1.775190819]
+
 ## Output to .RData
 save(MAB.biomass.80s, file = 'data/MAB_biomass_estimates.RData')
+
