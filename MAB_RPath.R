@@ -20,7 +20,7 @@ library(Rpath); library(data.table); library(dplyr); library(here)
 ## Add functional groups to model and generate rpath params
 source(here("MAB_fleets.R"))
 groups<-as.vector(groups_fleets$RPATH)
-types<-c(rep(0,31),1,rep(0,17),rep(2,2),rep(3,11))
+types<-c(rep(0,32),1,rep(0,20),rep(2,2),rep(3,12))
 MAB.rpath.params<-create.rpath.params(group = groups, type = types)
 
 ## Add biomass estimates

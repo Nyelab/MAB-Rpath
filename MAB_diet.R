@@ -5,7 +5,7 @@
 ##                    using reference to diet and stomach data. Diet
 ##                    data is pulled from other sources where appropriate.
 ##
-## Author: Brandon Beltz, updated by Sarah J. Weisberg
+## Author: Brandon Beltz, updated by Sarah J. Weisberg, further updated by Max Grezlk
 ## ---------------------------
 ##
 ## Notes: This version is specific to the MABRpath model.
@@ -83,8 +83,9 @@ prey[PYCOMNAM == 'ATLANTIC MENHADEN',                   RPATH := 'AtlMenhaden']
 ## Species to groups
 prey[PYCOMNAM %in% c('SEA SCALLOP', 'SEA SCALLOP VISCERA','SCALLOPS',
                      'SCALLOP VISCERA', 'SCALLOP SHELL'), RPATH := 'AtlScallop']
-prey[PYCOMNAM %in% c('ATLANTIC SURFCLAM', 'SURFCLAM VISCERA', 'OCEAN QUAHOG', 
-                     'OCEAN QUAHOG VISCERA', 'OCEAN QUAHOG SHELL'), RPATH := 'Megabenthos']
+prey[PYCOMNAM %in% c('ATLANTIC SURFCLAM', 'SURFCLAM VISCERA'), RPATH := 'SurfClam']
+prey[PYCOMNAM %in% c('OCEAN QUAHOG', 'OCEAN QUAHOG VISCERA', 'OCEAN QUAHOG SHELL'), 
+     RPATH := 'OceanQuahog']
 prey[PYCOMNAM %in% c('LONGFIN SQUID', 'LOLIGO SP PEN'), RPATH := 'Loligo']
 prey[PYNAM    %in% c('LOLIGO SP', 'LOLIGO SP BEAKS'),   RPATH := 'Loligo']
 
@@ -168,7 +169,7 @@ prey[PYABBR == 'PRESER', RPATH := 'NotUsed']
 #Reassign groups
 spp <- spp[!duplicated(spp$SVSPP),]
 spp <- spp[RPATH == 'AtlHerring',     RPATH := 'SmPelagics']
-spp <- spp[RPATH == 'Clams',          RPATH := 'Megabenthos']
+# spp <- spp[RPATH == 'Clams',          RPATH := 'Megabenthos']
 spp <- spp[RPATH == 'Haddock',        RPATH := 'OtherDemersals']
 spp <- spp[RPATH == 'LargePelagics',  RPATH := 'OtherPelagics']
 spp <- spp[RPATH == 'OffHake',        RPATH := 'OtherDemersals']
