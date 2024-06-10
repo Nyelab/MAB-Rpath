@@ -4,7 +4,7 @@
 ## Purpose of script: Estimate discards from NOAA observer data for MAB Rpath
 ##                    functional groups.
 ##
-## Author: Brandon Beltz
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
 ## Last modified: 02 Sep 2021
 ##
@@ -12,18 +12,16 @@
 ## ---------------------------
 ##
 ## Notes: This script follows the method established by Weisberg.
-##
-## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 17:00:31 2023 ------------------------------
+
 
 ## Load libraries, packages and functions
 library(here);library(tidyr);library(data.table)
 
 ## Load observer data and landings
-load("data/observer_data.RData")
-source("MAB_landings.R")
+load(here("data/observer_data.RData"))
+source(here("MAB_landings.R"))
 
 ## Rename HMS fleet
 ob.all[FLEET == "HMS",FLEET := "HMS Fleet"]
@@ -70,7 +68,7 @@ discards.top<-merge(first.dk,MAB.ob,by = c("RPATH","FLEET"))
 
 ## Average DK over 5 years for each group and gear
 temp<-c()
-for (i in 1:46){
+for (i in 1:length(first.dk$Discards)){
   temp<-subset(discards.top,first.dk$RPATH[i] == discards.top$RPATH & first.dk$FLEET[i] == discards.top$FLEET)
   temp<-subset(temp,YEAR<=first_YEAR+4)
   first.dk$five_means[i]<-mean(temp$DK)
@@ -86,7 +84,7 @@ high.var<-subset(first.dk,cv>1)
 
 ## Average high.var over 10 years instead of 5
 temp<-c()
-for (i in 1:22){
+for (i in 1:length(high.var$Discards)){
   temp<-subset(discards.top,high.var$RPATH[i] == discards.top$RPATH & high.var$FLEET[i] == discards.top$FLEET)
   temp<-subset(temp,YEAR<=first_YEAR+9)
   high.var$ten_means[i]<-mean(temp$DK)

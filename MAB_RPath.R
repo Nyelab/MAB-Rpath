@@ -1,41 +1,36 @@
-## ---------------------------
+
 ## Script name: MAB_RPath.R
 ##
 ## Purpose of script: Compile all data to create functional RPath model.
 ##                    
 ##
-## Author: Brandon Beltz
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
-## Last updated: 09 Sep 2021
 ##
-## Email: brandon.beltz@stonybrook.edu
-## ---------------------------
-##
-## Notes: This version includes all original data for the purpose of
-##        identifying and resolving issues.
-##
-## ---------------------------
-## Set working directory
+## Email: sarah.j.weisberg@stonybrook.edu
+#
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 16:54:53 2023 ------------------------------
 
 ## Load libraries, packages and functions
 library(Rpath); library(data.table); library(dplyr); library(here)
 
+# Model Setup -------------------------------------------------------------
+
 ## Add functional groups to model and generate rpath params
-source("MAB_fleets.R")
+source(here("MAB_fleets.R"))
 groups<-as.vector(groups_fleets$RPATH)
 types<-c(rep(0,31),1,rep(0,17),rep(2,2),rep(3,11))
 MAB.rpath.params<-create.rpath.params(group = groups, type = types)
 
 ## Add biomass estimates
-source("MAB_biomass_estimates.R")
+source(here("MAB_biomass_estimates.R"))
 biomass<-left_join(groups_fleets,MAB.biomass.80s,by = "RPATH")
 biomass<-as.vector(biomass$Biomass)
 MAB.rpath.params$model[,Biomass:=biomass]
 
 ## Add PB parameters
-source("MAB_params.R")
+source(here("MAB_params.R"))
 pb<-cbind(MAB.groups,MAB.PB)
 pb<-left_join(groups_fleets,pb,by = "RPATH")
 pb<-as.vector(pb$MAB.PB)
@@ -126,7 +121,7 @@ MAB.rpath.params$model[, "Clam Dredge" := clam]
 
 ## Recreational
 source("MAB_rec_catch.R")
-rec_catch<-left_join(groups_fleets,MAB.mrip,by="RPATH")
+rec_catch<-left_join(groups_fleets,MAB.mrip_summary,by="RPATH")
 rec_catch<-as.vector(rec_catch$Per_Area)
 rec_catch[is.na(rec_catch)]<-0
 rec_catch[50:51]<-0
@@ -192,10 +187,15 @@ clam.d<-c(rep(0,49),rep(0,2),rep(NA,11))
 MAB.rpath.params$model[, "Clam Dredge.disc" := clam.d]
 
 ## Run diet matrix
-source("MAB_diet.R")
+source(here("MAB_diet.R"))
 
 ## Fill Rpath parameter file with diet
-source("MAB_diet_fill.R")
+source(here("MAB_diet_fill.R"))
+
+
+# Sarah_changes -----------------------------------------------------------
+
+source(here("Sarah_R/rebalance.R"))
 
 ## Run model
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
@@ -205,20 +205,20 @@ MAB.rpath
 webplot(MAB.rpath, labels = T)
 
 ## Save .csv file with model information
-write.Rpath(MAB.rpath, file="MAB_model.csv")
-write.csv(MAB.rpath.params$model, file="MAB_prebalance_model.csv")
-write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
-
-## Balance adjustments
-MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
-MAB.rpath
-source("MAB_prebal.R")
-EE<-MAB.rpath$EE
-EE[order(EE)]
-write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 #write.Rpath(MAB.rpath, file="MAB_model.csv")
+#write.csv(MAB.rpath.params$model, file="MAB_prebalance_model.csv")
+#write.csv(MAB.rpath.params$diet, file = "MAB_prebalance_diet.csv")
 
-## Biomass changes
+# ## Balance adjustments
+# MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
+# MAB.rpath
+# source(here("MAB_prebal.R"))
+# EE<-MAB.rpath$EE
+# EE[order(EE)]
+# write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
+# #write.Rpath(MAB.rpath, file="MAB_model.csv")
+
+# Balancing changes -------------------
 ## OtherPelagics
 ## Increase biomass by 200x (Lucey, Link, Buccheister et al.)
 MAB.rpath.params$model$Biomass[29]<-MAB.rpath.params$model$Biomass[29]*200
@@ -264,12 +264,13 @@ MAB.rpath.params$model$Biomass[21]<-MAB.rpath.params$model$Biomass[21]*50
 MAB.rpath.params$model$Biomass[9]<-MAB.rpath.params$model$Biomass[9]*2
 
 ## SmFlatfishes
-## Increase biomass by 10x (Lucey)
-MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*10
+## Increase biomass by 14.5x (Lucey)
+## SW altered (increased to 14.5 from 14)
+MAB.rpath.params$model$Biomass[39]<-MAB.rpath.params$model$Biomass[39]*14.5
 
 ## AtlMackerel
 ## Increase biomass by 16x (Lucey, Buccheister et al.)
-MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*20
+MAB.rpath.params$model$Biomass[4]<-MAB.rpath.params$model$Biomass[4]*16
 
 ## GelZooplankton
 ## Increase biomass by 2x (Prebal diagnostics)
@@ -277,7 +278,7 @@ MAB.rpath.params$model$Biomass[13]<-MAB.rpath.params$model$Biomass[13]*2
 
 ## SummerFlounder
 ## Increase biomass by 10x (Lucey, Buccheister et al.)
-MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*10
+#MAB.rpath.params$model$Biomass[44]<-MAB.rpath.params$model$Biomass[44]*10
 
 ## HMS
 ## Decrease biomass by 0.75x
@@ -296,8 +297,8 @@ MAB.rpath.params$model$Biomass[48]<-MAB.rpath.params$model$Biomass[48]*5
 MAB.rpath.params$model$Biomass[46]<-MAB.rpath.params$model$Biomass[46]*8
 
 ## SmPelagics
-## Increase biomass by 8x (Buccheister)
-MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*8
+## Increase biomass by 18x (Buchheister)
+MAB.rpath.params$model$Biomass[41]<-MAB.rpath.params$model$Biomass[41]*18
 
 ## LittleSkate
 ## Increase biomass by 5x (Lucey)
@@ -316,8 +317,8 @@ MAB.rpath.params$model$Biomass[47]<-MAB.rpath.params$model$Biomass[47]*8
 MAB.rpath.params$model$Biomass[22]<-MAB.rpath.params$model$Biomass[22]*2.5
 
 ## AtlScallop
-## Increase biomass by 4x (Lucey)
-MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*4
+## Increase biomass by 5x (Lucey)
+MAB.rpath.params$model$Biomass[5]<-MAB.rpath.params$model$Biomass[5]*5
 
 ## OtherSkates
 ## Increase biomass by 3x (Lucey)
@@ -343,6 +344,9 @@ MAB.rpath.params$model$Biomass[2]<-MAB.rpath.params$model$Biomass[2]*2
 ## Increase biomass by 1.5x (Lucey)
 MAB.rpath.params$model$Biomass[12]<-MAB.rpath.params$model$Biomass[12]*1.5
 
+##Weakfish
+##Increase biomass by 1.5x (Assessment)
+MAB.rpath.params$model$Biomass[45]<-MAB.rpath.params$model$Biomass[45]*1.5
 
 ## PB changes
 ## Bluefish
@@ -354,8 +358,8 @@ MAB.rpath.params$model$PB[9]<-MAB.rpath.params$model$PB[9]*2
 MAB.rpath.params$model$PB[15]<-MAB.rpath.params$model$PB[15]/2
 
 ## AtlMackerel
-## Decrease PB by 5x
-MAB.rpath.params$model$PB[4]<-MAB.rpath.params$model$PB[4]/5
+## Decrease PB by 2x
+MAB.rpath.params$model$PB[4]<-MAB.rpath.params$model$PB[4]/2
 
 ## GelZooplankton
 ## Increase PB by 10x (Lucey)
@@ -442,7 +446,7 @@ MAB.rpath.params$model$Trap[36]<-MAB.rpath.params$model$Trap[36]*0
 ## Reduce trap fishing
 MAB.rpath.params$model$Trap[29]<-MAB.rpath.params$model$Trap[29]*0
 ## Reduce recreational fishing by 0.01x
-MAB.rpath.params$model$Recreational[29]<-MAB.rpath.params$model$Recreational[29]*0.01
+#MAB.rpath.params$model$Recreational[29]<-MAB.rpath.params$model$Recreational[29]*0.01
 ## Reduce pelagic fishing by 0.1x
 MAB.rpath.params$model$Pelagic[29]<-MAB.rpath.params$model$Pelagic[29]*0.1
 
@@ -450,29 +454,34 @@ MAB.rpath.params$model$Pelagic[29]<-MAB.rpath.params$model$Pelagic[29]*0.1
 ## Reduce recreational fishing
 MAB.rpath.params$model$Recreational[9]<-MAB.rpath.params$model$Recreational[9]*.01
 
+## Scup
+## Reduce recreational fishing
+## SW addition
+#MAB.rpath.params$model$Recreational[34]<-MAB.rpath.params$model$Recreational[34]*0.05
+
 ## SouthernDemersals
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*.01
+#MAB.rpath.params$model$Recreational[42]<-MAB.rpath.params$model$Recreational[42]*.01
 ## Reduce trap fishing
 MAB.rpath.params$model$Trap[42]<-MAB.rpath.params$model$Trap[42]*.01
 
 ## BlackSeaBass
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*.01
+#MAB.rpath.params$model$Recreational[8]<-MAB.rpath.params$model$Recreational[8]*.01
 
 ## Cod
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.1
+#MAB.rpath.params$model$Recreational[11]<-MAB.rpath.params$model$Recreational[11]*.1
 
 ## AtlMackerel
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.01
+#MAB.rpath.params$model$Recreational[4]<-MAB.rpath.params$model$Recreational[4]*.01
 
 ## OtherDemersals
 ## Reduce trap fishing
 MAB.rpath.params$model$Trap[28]<-MAB.rpath.params$model$Trap[28]*.01
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[28]<-MAB.rpath.params$model$Recreational[28]*.01
+#MAB.rpath.params$model$Recreational[28]<-MAB.rpath.params$model$Recreational[28]*.01
 
 ## SilverHake
 ## Reduce SM Mesh fishing
@@ -480,15 +489,16 @@ MAB.rpath.params$model$`SM Mesh`[37]<-MAB.rpath.params$model$`SM Mesh`[37]*.1
 
 ## Weakfish
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[45]<-MAB.rpath.params$model$Recreational[45]*.01
+## SW added
+MAB.rpath.params$model$Recreational[45]<-MAB.rpath.params$model$Recreational[45]*.5
 
 ## RedHake
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[33]<-MAB.rpath.params$model$Recreational[33]*.01
+#MAB.rpath.params$model$Recreational[33]<-MAB.rpath.params$model$Recreational[33]*.01
 
 ## SummerFlounder
 ## Reduce recreational fishing
-MAB.rpath.params$model$Recreational[44]<-MAB.rpath.params$model$Recreational[44]*.1
+#MAB.rpath.params$model$Recreational[44]<-MAB.rpath.params$model$Recreational[44]*.1
 
 ## Mesopelagics
 ## Reduce trap fishing
@@ -552,13 +562,14 @@ MAB.rpath.params$diet[4,45]<-MAB.rpath.params$diet[4,45]-0.04
 MAB.rpath.params$diet[20,45]<-MAB.rpath.params$diet[20,45]+0.04
 
 ## Relieve predation pressure on SmFlatfishes
-## SpinyDogfish: SmFlatfishes -2.5%, Macrobenthos +2.5%
-MAB.rpath.params$diet[39,44]<-MAB.rpath.params$diet[39,44]-0.025
-MAB.rpath.params$diet[20,44]<-MAB.rpath.params$diet[20,44]+0.025
+## SpinyDogfish: SmFlatfishes -2.2%, Macrobenthos +2.2%
+# SW changed, previously had been leading to negative diet 
+MAB.rpath.params$diet[39,44]<-MAB.rpath.params$diet[39,44]-0.023
+MAB.rpath.params$diet[20,44]<-MAB.rpath.params$diet[20,44]+0.023
 
 ## Goosefish: SmFlatfishes -1.2%, Macrobenthos +1.2%
-MAB.rpath.params$diet[39,15]<-MAB.rpath.params$diet[39,15]-0.012
-MAB.rpath.params$diet[20,15]<-MAB.rpath.params$diet[20,15]+0.012
+MAB.rpath.params$diet[39,15]<-MAB.rpath.params$diet[39,15]-0.012-0.001
+MAB.rpath.params$diet[20,15]<-MAB.rpath.params$diet[20,15]+0.012+0.001
 
 ## OtherSkates: SmFlatfishes -2.5%, Macrobenthos +2.5%
 MAB.rpath.params$diet[39,32]<-MAB.rpath.params$diet[39,32]-0.025
@@ -670,18 +681,33 @@ MAB.rpath.params$diet[20,10]<-MAB.rpath.params$diet[20,10]+0.01
 
 ## Relieve predation pressure on Butterfish
 ## OtherPelagics: Butterfish -10%, Macrobenthos +10%
-MAB.rpath.params$diet[10,30]<-MAB.rpath.params$diet[10,30]-0.1
-MAB.rpath.params$diet[20,30]<-MAB.rpath.params$diet[20,30]+0.1
+## SW removed -- this led to negative diet & was not needed to balance
+# MAB.rpath.params$diet[10,30]<-MAB.rpath.params$diet[10,30]-0.1
+# MAB.rpath.params$diet[20,30]<-MAB.rpath.params$diet[20,30]+0.1
 
 ## Loligo: Butterfish -1.5%, Macrobenthos +1.5%
 MAB.rpath.params$diet[10,20]<-MAB.rpath.params$diet[10,20]-0.015
 MAB.rpath.params$diet[20,20]<-MAB.rpath.params$diet[20,20]+0.015
+
+## Relieve predation pressure on Weakfish
+## SW added
+## SouthernDemersals: Weakfish -4%, Macrobenthos +4%
+MAB.rpath.params$diet[45,43]<-MAB.rpath.params$diet[45,43]-0.04
+MAB.rpath.params$diet[20,43]<-MAB.rpath.params$diet[20,43]+0.04
+
+#add data pedigree
+source("Sarah_R/data_pedigree.R")
 
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
 source("MAB_prebal.R")
 EE<-MAB.rpath$EE
 EE[order(EE)]
-write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
+#write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
 #write.Rpath(MAB.rpath, file="MAB_model.csv")
-write.csv(MAB.rpath.params$diet, file = "MAB_diet.csv")
+#write.csv(MAB.rpath.params$diet, file = "MAB_diet.csv")
+
+
+#Save files
+save(MAB.rpath, file = "outputs/MAB_Rpath.RData")
+save(MAB.rpath.params,file = "outputs/MAB_params_Rpath.RData")

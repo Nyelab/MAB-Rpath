@@ -4,37 +4,30 @@
 ## Purpose of script: Convert commercial landings from Sean Lucey to correct
 ##                    units and format for use in RPath.
 ##
-## Author: Brandon Beltz
-##
-## Last updated: 02 Sep 2021
+## Author: Brandon Beltz, updated by Sarah J. Weisberg
 ##
 ## Email: brandon.beltz@stonybrook.edu
 ## ---------------------------
-##
-## Notes:
-##
-## ---------------------------
-## Set working directory
 
-setwd("C:/Users/beven/Desktop/MAB-Rpath")
+# Fri Dec  8 17:01:12 2023 ------------------------------
 
 ## Load libraries, packages and functions
-library(here);library(tidyr);library(dplyr);library(Survdat);library(rgdal)
+library(here);library(tidyr);library(dplyr);library(survdat)
 
 ## Load landings, species codes, survdat and basic inputs, 
-load("data/mean_landings_mab_80_85.RData")
-load("data/Species_codes.RData")
-load("data/Survdat.RData")
-source("MAB_basic_inputs.R")
+load(here("data/mean_landings_mab_80_85.RData"))
+load(here("data/Species_codes.RData"))
+load(here("data/Survdat.RData"))
+source(here("MAB_basic_inputs.R"))
 
 ## Change "HMS" to "HMS Fleet"
 mean.land[FLEET == "HMS",FLEET := "HMS FLEET"]
 
 ## Calculate area within MAB
-strata<-readOGR('data/strata','strata')
-strat.area<-getarea(strata, 'STRATA')
-setnames(strat.area,'STRATA','STRATUM')
-MAB.strat.area<-strat.area[STRATUM %in% MAB.strata,sum(Area)]
+# strata<-readOGR('data/strata','strata')
+# strat.area<-getarea(strata, 'STRATA')
+# setnames(strat.area,'STRATA','STRATUM')
+# MAB.strat.area<-strat.area[STRATUM %in% MAB.strata,sum(Area)]
 
 ## Filter species codes for NESPP3 and RPATH
 spp<-select(spp, one_of(c("NESPP3","RPATH")))
@@ -49,7 +42,7 @@ mean.land<-na.exclude(mean.land[,-1])
 mean.land<-mean.land %>% group_by(FLEET,RPATH) %>% summarise(SPPLIVMT=sum(SPPLIVMT))
 
 ## Convert to t/km^2 and remove SPPLIVMT
-mean.land$landings<-mean.land$SPPLIVMT/MAB.strat.area
+mean.land$landings<-mean.land$SPPLIVMT/MAB.area
 mean.land<-mean.land[,-3]
 
 ## Organize fleets into data frames
@@ -114,3 +107,4 @@ other_dredge[is.na(other_dredge)]<-0
 clam<-left_join(MAB.groups,clam,by="RPATH")
 clam$FLEET<-"Clam Dredge"
 clam[is.na(clam)]<-0
+
