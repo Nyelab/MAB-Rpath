@@ -24,13 +24,14 @@ library(survdat)
 library(lwgeom)
 library(dplyr)
 library(units)
+library(readr)
 '%notin%' <-Negate('%in%')
 
-## Load Survdat, species list and strata
-load(here("data/Survdat.RData"))
-load(here("data/Species_codes.RData"))
-load(here("data/SurvdatClams.RData"))
-load(here("data/SurvdatScallops.RData"))
+## Load Survdat, species list and strata from Rpathdata repo
+load(url('https://github.com/NOAA-EDAB/Rpathdata/blob/f34255ee1afea1bdc51e90166f79df9b273de6cd/data/Survdat.RData?raw=true'))
+load(url('https://github.com/NOAA-EDAB/Rpathdata/blob/f34255ee1afea1bdc51e90166f79df9b273de6cd/data/Species_codes.RData?raw=true'))
+load(url('https://github.com/NOAA-EDAB/Rpathdata/blob/f34255ee1afea1bdc51e90166f79df9b273de6cd/data/survdatClams.RData?raw=true'))
+load(url('https://github.com/NOAA-EDAB/Rpathdata/blob/f34255ee1afea1bdc51e90166f79df9b273de6cd/data/survdatScallops.RData?raw=true'))
 
 source(here('MAB_basic_inputs.R'))
 
@@ -113,7 +114,7 @@ setnames(MAB.biomass.80s, 'V1','Biomass')
 ##Clams ----------------------------------------------
 #Use GB clam region to calculate biomass
 MAB.clam.index <- clams$data |> 
-                    filter(clam.region != 'GB') |>
+                    filter(clam.region != 'MAB') |>
                     filter(!is.na(SVSPP))
 clam.index <- MAB.clam.index |>
                   group_by(YEAR, SVSPP) |>
@@ -165,7 +166,7 @@ library(DBI); library(sf); library(survdat)
 # channel <- dbutils::connect_to_database('sole', 'slucey')
 
 #scall <- survdat::get_survdat_scallop_data(channel, getWeightLength = T)
-load(here::here('data', 'survdatScallops.RData'))
+# load(here::here('data', 'survdatScallops.RData'))
 
 #Scallop survey did not record weight prior to 2001 (FSCS) so need to manually
 #calculate catch weights
@@ -206,7 +207,7 @@ MAB.biomass.80s <- rbindlist(list(MAB.biomass.80s, scall.input))
 
 
 # Add EMAX groups ------------------------------------------
-load("data/EMAX_params.RData")
+load(url('https://github.com/NOAA-EDAB/Rpathdata/blob/cb7f1b381a79c927e842335408072293c087a8bf/data/MAB_EMAX_params.RData?raw=true'))
 MAB.EMAX<-as.data.table(EMAX.params)
 
 ## Merge groups with biomass estimates
