@@ -27,12 +27,15 @@ params<-rbind(params,krill_men)
 params <- params %>% mutate(PB=as.numeric(PB),QB=as.numeric(QB),BA=as.numeric(BA),RPATH = as.character(RPATH))
 
 # Manually add parameter values for SurfClam, OceanQuahog -----------------------
-# just duplicating values for AtlScallop
+# duplicating values for AtlScallop
+# except biomass accumulation which is 0 for both species but not Scallop
 params <- as.data.table(params)
 surf<- params[RPATH=="AtlScallop",]
 surf[,RPATH := 'SurfClam']
+surf[,BA := 0]
 ocean<- params[RPATH=="AtlScallop",]
 ocean[,RPATH := 'OceanQuahog']
+ocean[,BA := 0]
 params<-rbind(params,surf)
 params<-rbind(params,ocean)
 
