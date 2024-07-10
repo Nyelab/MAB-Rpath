@@ -36,3 +36,9 @@ setnames(MAB.groups,'V1','RPATH')
 MAB.strata<-c(1010:1080, 1100:1120, 1600:1750, 3010:3450, 3470, 3500, 3510)
 MAB.stareas<-c(537, 539, 600, 612:616, 621, 622, 625, 626, 631, 632)
 
+#Calculate total MAB area ------------------------------------------
+area<-sf::st_read(dsn=system.file("extdata","strata.shp",package="survdat"))
+area<-get_area(areaPolygon = area, areaDescription="STRATA")
+MAB.area<-subset(area, area$STRATUM %in% MAB.strata)
+MAB.area<-sum(MAB.area$Area)
+rm(area)
