@@ -110,6 +110,7 @@ copes_ratio<- calfin$biomass/sum(copes_avg$biomass)
 
 #adjust starting biomasses
 #SmCopepods
+load(here("MAB_params_Rpath.RData"))
 sm_new<-MAB.rpath.params$model$Biomass[which(MAB.rpath.params[["model"]][["Group"]] == "SmCopepods")] + MAB.rpath.params$model$Biomass[which(MAB.rpath.params[["model"]][["Group"]] == "LgCopepods")] * (1-copes_ratio)
 MAB.rpath.params$model$Biomass[which(MAB.rpath.params[["model"]][["Group"]] == "SmCopepods")] <- sm_new
 #LgCopepods
@@ -132,7 +133,7 @@ MAB.rpath.params$diet[Group == 'LgCopepods', AmLobster := AmLobster + 0.005]
 
 # MAB.rpath.params$diet[20,2]<-MAB.rpath.params$diet[20,2]-0.005
 MAB.rpath.params$diet[Group == 'Macrobenthos', AmLobster := AmLobster - 0.005]
-MAB.rpath.params$diet[38,2]<-MAB.rpath.params$diet[38,2]+0.005
+# MAB.rpath.params$diet[38,2]<-MAB.rpath.params$diet[38,2]+0.005
 MAB.rpath.params$diet[Group == 'SmCopepods', AmLobster := AmLobster + 0.005]
 
 ##AtlMackerel -----------------------------------------------------------
