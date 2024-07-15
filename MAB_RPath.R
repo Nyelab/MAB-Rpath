@@ -767,8 +767,8 @@ MAB.rpath.params$diet[Group == 'Macrobenthos', SummerFlounder := SummerFlounder 
 ## Macrobenthos: Megabenthos -1%, Macrobenthos +1%
 # MAB.rpath.params$diet[21,21]<-MAB.rpath.params$diet[21,21]-0.01
 # MAB.rpath.params$diet[20,21]<-MAB.rpath.params$diet[20,21]+0.01
-MAB.params$diet[Group == 'Megabenthos', Macrobenthos := Macrobenthos - 0.01]
-MAB.params$diet[Group == 'Macrobenthos', Macrobenthos := Macrobenthos + 0.01]
+MAB.rpath.params$diet[Group == 'Megabenthos', Macrobenthos := Macrobenthos - 0.01]
+MAB.rpath.params$diet[Group == 'Macrobenthos', Macrobenthos := Macrobenthos + 0.01]
 
 ## SilverHake --------------------------
 ## Relieve predation pressure on SilverHake
