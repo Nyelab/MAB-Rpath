@@ -110,7 +110,6 @@ copes_ratio<- calfin$biomass/sum(copes_avg$biomass)
 
 #adjust starting biomasses
 #SmCopepods
-load(here("MAB_params_Rpath.RData"))
 sm_new<-MAB.rpath.params$model$Biomass[which(MAB.rpath.params[["model"]][["Group"]] == "SmCopepods")] + MAB.rpath.params$model$Biomass[which(MAB.rpath.params[["model"]][["Group"]] == "LgCopepods")] * (1-copes_ratio)
 MAB.rpath.params$model$Biomass[which(MAB.rpath.params[["model"]][["Group"]] == "SmCopepods")] <- sm_new
 #LgCopepods
