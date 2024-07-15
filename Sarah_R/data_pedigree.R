@@ -28,6 +28,8 @@ pedigree <- pedigree %>% filter(!RPATH == "Discards")
 #Remove pedigree inputs for fleets
 ngroups<-nliving <- nrow(MAB.rpath.params$model[Type <  3, ])
 MAB.rpath.params$pedigree <- MAB.rpath.params$pedigree[1:ngroups]
+# Remove pedigree inputs for discards
+MAB.rpath.params$pedigree <- MAB.rpath.params$pedigree[1:(ngroups - 1)]
 
 #Biomass
 MAB.rpath.params$pedigree[, Biomass := pedigree$Biomass]
