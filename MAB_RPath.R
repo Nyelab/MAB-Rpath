@@ -907,7 +907,7 @@ source("Sarah_R/data_pedigree.R")
 
 MAB.rpath<-rpath(MAB.rpath.params,eco.name='Mid-Atlantic Bight')
 MAB.rpath
-source("MAB_prebal.R")
+# source("MAB_prebal.R")
 EE<-MAB.rpath$EE
 EE[order(EE)]
 #write.Rpath(MAB.rpath,morts=T,file="MAB.rpath_morts.csv")
