@@ -27,6 +27,10 @@ groups<-as.vector(groups_fleets$RPATH)
 types<-c(rep(0,32),1,rep(0,20),2,rep(3,12))
 MAB.rpath.params<-create.rpath.params(group = groups, type = types)
 
+#count numbers of each group type
+nliving <- nrow(MAB.rpath.params$model[Type <  2, ])
+ndead   <- nrow(MAB.rpath.params$model[Type == 2, ])
+nfleets <- nrow(MAB.rpath.params$model[Type == 3, ])
 
 ## Add biomass estimates
 source(here("MAB_biomass_estimates.R"))
@@ -71,7 +75,7 @@ MAB.rpath.params$model[Group %in% c('AmLobster', 'Macrobenthos', 'Megabenthos',
                                  'AtlScallop', 'OtherShrimps'), Unassim := 0.3]
 
 ## Add detrital fate and set discards to 0
-MAB.rpath.params$model[,Detritus:=c(rep(1,53),rep(0,13))]
+MAB.rpath.params$model[,Detritus:=c(rep(1,nliving),rep(0,ndead),rep(1,nfleets))]
 #MAB.rpath.params$model[,Discards:=c(rep(0,51),rep(1,11))]
 
 ## Add landings by gear type
@@ -160,6 +164,66 @@ MAB.rpath.params$model[,"Recreational":=rec_catch]
 #Manually add menhaden catch (SW)
 purse_catch<-c(rep(0,52),0.35,0,rep(NA,12))
 MAB.rpath.params$model[,"PurseSeine":=purse_catch]
+
+#add discards
+### Fixed Gear -----------------------------------------------------
+fixed.d<-left_join(groups_fleets,fixed.d,by="RPATH")
+fixed.d<-as.vector(fixed.d$discards)
+# fixed.d[50:51]<-0
+MAB.rpath.params$model[, "Fixed Gear.disc" := fixed.d]
+
+### Lg Mesh -------------------------------------------------------
+lg_mesh.d<-left_join(groups_fleets,lg_mesh.d,by="RPATH")
+lg_mesh.d<-as.vector(lg_mesh.d$discards)
+# lg_mesh.d[50:51]<-0
+MAB.rpath.params$model[, "LG Mesh.disc" := lg_mesh.d]
+
+### Other ---------------------------------------------------------
+other.d<-left_join(groups_fleets,other.d,by="RPATH")
+other.d<-as.vector(other.d$discards)
+# other.d[50:51]<-0
+MAB.rpath.params$model[, "Other.disc" := other.d]
+
+### SM Mesh -------------------------------------------------------
+sm_mesh.d<-left_join(groups_fleets,sm_mesh.d,by="RPATH")
+sm_mesh.d<-as.vector(sm_mesh.d$discards)
+# sm_mesh.d[50:51]<-0
+MAB.rpath.params$model[, "SM Mesh.disc" := sm_mesh.d]
+
+### Scallop Dredge -------------------------------------------------
+scallop.d<-left_join(groups_fleets,scallop.d,by="RPATH")
+scallop.d<-as.vector(scallop.d$discards)
+# scallop.d[50:51]<-0
+MAB.rpath.params$model[, "Scallop Dredge" := scallop.d]
+
+### Trap ----------------------------------------------------------
+trap.d<-left_join(groups_fleets,trap.d,by="RPATH")
+trap.d<-as.vector(trap.d$discards)
+# trap.d[50:51]<-0
+MAB.rpath.params$model[, "Trap.disc" := trap.d]
+
+## HMS Fleet -------------------------------------------------------
+hms.d<-left_join(groups_fleets,hms.d,by="RPATH")
+hms.d<-as.vector(hms.d$discards)
+# hms.d[50:51]<-0
+MAB.rpath.params$model[, "HMS Fleet.disc" := hms.d]
+
+### Pelagic -------------------------------------------------------
+pelagic.d<-left_join(groups_fleets,pelagic.d,by="RPATH")
+pelagic.d<-as.vector(pelagic.d$discards)
+# pelagic.d[50:51]<-0
+MAB.rpath.params$model[, "Pelagic.disc" := pelagic.d]
+
+### Other Dredge --------------------------------------------------
+other_dredge.d<-left_join(groups_fleets,other_dredge.d,by="RPATH")
+other_dredge.d<-as.vector(other_dredge.d$discards)
+# other_dredge.d[50:51]<-0
+MAB.rpath.params$model[, "Other Dredge.disc" := other_dredge.d]
+
+### Clam Dredge ---------------------------------------------------
+clam.d<-c(rep(0,(nliving+ndead)),rep(NA,nfleets))
+MAB.rpath.params$model[, "Clam Dredge.disc" := clam.d]
+
 
 ## Run diet matrix
 source(here("MAB_diet.R"))
