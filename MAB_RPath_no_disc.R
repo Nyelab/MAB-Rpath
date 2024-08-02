@@ -171,6 +171,7 @@ fixed.d<-left_join(groups_fleets,fixed.d,by="RPATH")
 fixed.d<-as.vector(fixed.d$discards)
 # fixed.d[50:51]<-0
 MAB.rpath.params$model[, "Fixed Gear.disc" := fixed.d]
+MAB.rpath.params$model[Group == 'Detritus', 'Fixed Gear.disc' := 0]
 
 ### Lg Mesh -------------------------------------------------------
 lg_mesh.d<-left_join(groups_fleets,lg_mesh.d,by="RPATH")
@@ -183,46 +184,57 @@ other.d<-left_join(groups_fleets,other.d,by="RPATH")
 other.d<-as.vector(other.d$discards)
 # other.d[50:51]<-0
 MAB.rpath.params$model[, "Other.disc" := other.d]
-
+MAB.rpath.params$model[Group == 'Detritus', "Other.disc" := 0]
 ### SM Mesh -------------------------------------------------------
 sm_mesh.d<-left_join(groups_fleets,sm_mesh.d,by="RPATH")
 sm_mesh.d<-as.vector(sm_mesh.d$discards)
 # sm_mesh.d[50:51]<-0
 MAB.rpath.params$model[, "SM Mesh.disc" := sm_mesh.d]
+MAB.rpath.params$model[Group == 'Detritus', "SM Mesh.disc" := 0]
 
 ### Scallop Dredge -------------------------------------------------
 scallop.d<-left_join(groups_fleets,scallop.d,by="RPATH")
 scallop.d<-as.vector(scallop.d$discards)
 # scallop.d[50:51]<-0
 MAB.rpath.params$model[, "Scallop Dredge" := scallop.d]
+MAB.rpath.params$model[Group == 'Detritus', "Scallop Dredge.disc" := 0]
 
 ### Trap ----------------------------------------------------------
 trap.d<-left_join(groups_fleets,trap.d,by="RPATH")
 trap.d<-as.vector(trap.d$discards)
 # trap.d[50:51]<-0
 MAB.rpath.params$model[, "Trap.disc" := trap.d]
+MAB.rpath.params$model[Group == 'Detritus', "Trap.disc" := 0]
 
 ## HMS Fleet -------------------------------------------------------
 hms.d<-left_join(groups_fleets,hms.d,by="RPATH")
 hms.d<-as.vector(hms.d$discards)
 # hms.d[50:51]<-0
 MAB.rpath.params$model[, "HMS Fleet.disc" := hms.d]
+MAB.rpath.params$model[Group == 'Detritus', "HMS Fleet.disc" := 0]
 
 ### Pelagic -------------------------------------------------------
 pelagic.d<-left_join(groups_fleets,pelagic.d,by="RPATH")
 pelagic.d<-as.vector(pelagic.d$discards)
 # pelagic.d[50:51]<-0
 MAB.rpath.params$model[, "Pelagic.disc" := pelagic.d]
+MAB.rpath.params$model[Group == 'Detritus', "Pelagic.disc" := 0]
 
 ### Other Dredge --------------------------------------------------
 other_dredge.d<-left_join(groups_fleets,other_dredge.d,by="RPATH")
 other_dredge.d<-as.vector(other_dredge.d$discards)
 # other_dredge.d[50:51]<-0
 MAB.rpath.params$model[, "Other Dredge.disc" := other_dredge.d]
+MAB.rpath.params$model[Group == 'Detritus', "Other Dredge.disc" := 0]
 
 ### Clam Dredge ---------------------------------------------------
 clam.d<-c(rep(0,(nliving+ndead)),rep(NA,nfleets))
 MAB.rpath.params$model[, "Clam Dredge.disc" := clam.d]
+
+### Clam Dredge ---------------------------------------------------
+rec.d<-c(rep(0,(nliving+ndead)),rep(NA,nfleets))
+MAB.rpath.params$model[, "Recreational.disc" := rec.d]
+
 
 
 ## Run diet matrix
@@ -496,6 +508,7 @@ MAB.rpath.params$model[Group=="Loligo", PB := 3]
 MAB.rpath.params$model[Group=="OtherCephalopods", PB := 3]
 MAB.rpath.params$model[Group=="Macrobenthos", PB := 2.5]
 MAB.rpath.params$model[Group=="AmLobster", PB := 1.5]
+MAB.rpath.params$model[Group=="OceanQuahog", PB := 0.05]
 
 ## QB changes --------------------------------------------------------------
 
@@ -535,6 +548,7 @@ MAB.rpath.params$model[Group=="OtherPelagics",QB:=4]
 MAB.rpath.params$model[Group=="OtherSkates",QB:=1.1]
 MAB.rpath.params$model[Group=="Cod",QB:=1.2]
 MAB.rpath.params$model[Group=="RiverHerring",QB:=9.4]
+MAB.rpath.params$model[Group=="OceanQuahog", QB := 0.3]
 
 ### Micronekton --------------------------------------------------------
 #Adjusting Micronekton QB - not sure why it was so high in EMAX
