@@ -1,4 +1,4 @@
-Mass balance Rpath model for Mid-Atlantic Bight in the Northeast US Large Marine Ecosystem
+# Mass balance Rpath model for Mid-Atlantic Bight in the Northeast US Large Marine Ecosystem
 
 To generate balanced models, run MAB_Rpath.R script
 
